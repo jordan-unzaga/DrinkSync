@@ -5,16 +5,11 @@
     <title>Title</title>
 </head>
 <body>
-<div id="navbar-container"></div>
+<div id="navbar"></div>
 
 
 </body>
 
-<script>
-    fetch("../navbar.html")
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById("navbar-container").innerHTML = data;
-        });
-</script>
+<script src="../script/navbar.js"></script>
+
 </html>
