@@ -1,0 +1,19 @@
+/*                        Global layout                        */
+body {
+    margin: 0;
+    background: #222222;
+    color: #fff;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+.drink_page {
+    padding: 16px;
+}
+
+.loading_text {
+    text-align: center;
+    margin: 12px 0 24px;
+    opacity: 0.8;
+    font-size: 0.9rem;
+}
