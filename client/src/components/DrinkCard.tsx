@@ -24,6 +24,7 @@ export default function DrinkCard({
                 {/*<div className="flavor"><strong>Flavor:</strong> Coffee, Vanilla, Cocoa</div> */}
                 <p className="desc">Smooth, slightly sweet, bold espresso kick.</p>
                 <div className="tag alcoholic">{alcoholic}</div>
+                <button>Save</button>
             </div>
         </li>
     )

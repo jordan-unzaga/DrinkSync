@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/~w62q346/finalproject/drink-sync/client/build/static/css/main.8b7de90d.css",
-    "main.js": "/~w62q346/finalproject/drink-sync/client/build/static/js/main.8ea36878.js",
+    "main.js": "/~w62q346/finalproject/drink-sync/client/build/static/js/main.aed4e10c.js",
     "static/js/453.70e7ec24.chunk.js": "/~w62q346/finalproject/drink-sync/client/build/static/js/453.70e7ec24.chunk.js",
     "index.html": "/~w62q346/finalproject/drink-sync/client/build/index.html",
     "main.8b7de90d.css.map": "/~w62q346/finalproject/drink-sync/client/build/static/css/main.8b7de90d.css.map",
-    "main.8ea36878.js.map": "/~w62q346/finalproject/drink-sync/client/build/static/js/main.8ea36878.js.map",
+    "main.aed4e10c.js.map": "/~w62q346/finalproject/drink-sync/client/build/static/js/main.aed4e10c.js.map",
     "453.70e7ec24.chunk.js.map": "/~w62q346/finalproject/drink-sync/client/build/static/js/453.70e7ec24.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.8b7de90d.css",
-    "static/js/main.8ea36878.js"
+    "static/js/main.aed4e10c.js"
   ]
 }
