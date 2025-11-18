@@ -1,10 +1,17 @@
 
-import DrinkCard from "./components/DrinkCard"
+import "./styles/Drink.css"
 import './App.css';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Search from "./components/Search";
+
 
 function App() {
   return (
-    <DrinkCard />
+    <BrowserRouter basename="/~w62q346/finalproject/drink-sync/client/build">
+      <Routes>
+        <Route path="/" element={<Search />}/>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

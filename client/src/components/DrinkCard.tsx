@@ -1,17 +1,31 @@
+import "../styles/Drink.css"
 
-export default function DrinkCard() {
+interface DrinkCardProps {
+    id: string;
+    image: string;
+    title: string;
+    alcoholic: string;
+
+}
+
+export default function DrinkCard({
+    id,
+    image,
+    title,
+    alcoholic
+}: DrinkCardProps) {
     return (
-        <div className="drink_card">
-            <img className="drink_image" src="images/test_bottle.webp" alt="Drink name" />
+        <li className="drink_card">
+            <img className="drink_image" src={image} alt="Drink name" />
             <div className="card_meta">
-                <h3 className="name">Espresso Martini</h3>
-                <div className="rating">4.5★</div>
+                <h3 className="name">{title}</h3>
+                {/*<div className="rating">4.5★</div>*/}
 
-                <div className="flavor"><strong>Flavor:</strong> Coffee, Vanilla, Cocoa</div>
+                {/*<div className="flavor"><strong>Flavor:</strong> Coffee, Vanilla, Cocoa</div> */}
                 <p className="desc">Smooth, slightly sweet, bold espresso kick.</p>
-                <div className="tag alcoholic">Alcoholic</div>
+                <div className="tag alcoholic">{alcoholic}</div>
             </div>
-        </div>
+        </li>
     )
 }
         
