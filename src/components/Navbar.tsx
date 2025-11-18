@@ -1,14 +1,17 @@
-import {useState} from "react";
+type NavbarProps = {
+    isLoggedIn: boolean;
+    onLoginClick: () => void;
+    onLogoutClick: () => void;
+};
 
-export function Navbar() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+export function Navbar({ isLoggedIn, onLoginClick, onLogoutClick }: NavbarProps) {
     return (
         <header className="nav">
             <div className="nav_inner">
                 <div className="nav_brand">
-                    <span role="img" aria-label="drink">
-                        🍹
-                    </span>
+          <span role="img" aria-label="drink">
+            🍹
+          </span>
                     <span>Drink Sync</span>
                 </div>
 
@@ -20,26 +23,28 @@ export function Navbar() {
                             <a href="/drinks" className="nav_link">My Drinks</a>
                             <a href="/add" className="nav_link">Add Drink</a>
                             <a href="/about" className="nav_link">About</a>
+                            <button
+                                type="button"
+                                onClick={onLogoutClick}
+                                className="nav_link"
+                            >
+                                Logout
+                            </button>
                         </>
                     ) : (
                         <>
                             <a href="/about" className="nav_link">About</a>
-                            <a className="nav_link drinks_btn">
+                            <button
+                                type="button"
+                                className="nav_link drinks_btn"
+                                onClick={onLoginClick}
+                            >
                                 Login
-                            </a>
+                            </button>
                         </>
                     )}
-                    <button
-                        onClick={() => setIsLoggedIn(v => !v)}
-                        className="nav_toggle_test"
-                    >
-                        Toggle Login
-                    </button>
                 </nav>
-
             </div>
         </header>
     );
 }
-
-

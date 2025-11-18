@@ -1,14 +1,10 @@
 import React from "react";
-import { createRoot } from "react-dom/client";
-import { DrinkPage } from "./pages/DrinkPage";
-import "./styles/DrinkCard.css";
-import "./index.css";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import "./styles/auth.css";
 
-const rootEl = document.getElementById("root");
-if (!rootEl) throw new Error("Root element not found");
-
-createRoot(rootEl).render(
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
-        <DrinkPage />
+        <App />
     </React.StrictMode>
 );

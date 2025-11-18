@@ -63,13 +63,13 @@
 }
 
 .drinks_btn {
-    background: #ffb800;        /* new color */
+    background: #00e1ff;
     color: #000;
     font-weight: 700;
 }
 
 .drinks_btn:hover {
-    background: #ffd257;
+    background: #00ffff;
 }
 
 

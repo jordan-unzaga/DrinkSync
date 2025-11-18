@@ -1,4 +1,10 @@
-import type { Drink } from "../api/fetchDrinks";
+export type Drink = {
+    name?: string;
+    description?: string;
+    alcoholic?: boolean;
+    rating?: number;
+    icon?: string;
+};
 
 export function DrinkCard(drink: Drink) {
     const {
@@ -6,7 +12,7 @@ export function DrinkCard(drink: Drink) {
         description = "No description available.",
         alcoholic = false,
         rating = 0,
-        icon = "/empty.png",
+        icon = "/empty.png"
     } = drink;
 
     return (

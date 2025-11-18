@@ -26,7 +26,7 @@ export async function fetchDrinks(
 
     const drinks: Drink[] = cocktails.map((d: any) => ({
         name: d.name ?? "Unknown",
-        description: d.description ?? "No description.",
+        description: d.instructions ?? "No description.",
         alcoholic:
             d.alcoholic ??
             d.is_alcoholic ??

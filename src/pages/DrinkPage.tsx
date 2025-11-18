@@ -25,6 +25,7 @@ export function DrinkPage() {
                     page
                 );
                 if (cancelled) return;
+                console.log(drinks)
 
                 setDrinks((prev) => [...prev, ...newDrinks]);
                 setTotalPages(totalPages);
