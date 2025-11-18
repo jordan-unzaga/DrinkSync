@@ -1,9 +1,21 @@
 import { useEffect, useRef, useState } from "react";
-import { fetchDrinks, type Drink } from "../api/fetchDrinks";
+import {
+    fetchDrinks,
+    type Drink,
+} from "../api/fetchDrinks";
 import { DrinkCard } from "../components/DrinkCard";
 import { Navbar } from "../components/Navbar";
 import "../styles/DrinkCard.css";
 import "../styles/Navbar.css";
+
+const CACHE_KEY = "drink_page_state_v1";
+
+type CachedState = {
+    drinks: Drink[];
+    page: number;
+    totalPages: number | null;
+    searchQuery: string;
+};
 
 export function DrinkPage() {
     const [drinks, setDrinks] = useState<Drink[]>([]);
@@ -13,9 +25,43 @@ export function DrinkPage() {
     const [error, setError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
 
+    const [hasHydratedFromCache, setHasHydratedFromCache] = useState(false);
+    const [shouldSkipNextLoad, setShouldSkipNextLoad] = useState(false);
+
     const sentinelRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
+        const raw = sessionStorage.getItem(CACHE_KEY);
+        if (raw) {
+            try {
+                const parsed: CachedState = JSON.parse(raw);
+
+                setDrinks(parsed.drinks ?? []);
+                setPage(parsed.page ?? 1);
+                setTotalPages(
+                    typeof parsed.totalPages === "number"
+                        ? parsed.totalPages
+                        : null
+                );
+                setSearchQuery(parsed.searchQuery ?? "");
+
+                setShouldSkipNextLoad(true);
+            } catch {
+                sessionStorage.removeItem(CACHE_KEY);
+            }
+        }
+
+        setHasHydratedFromCache(true);
+    }, []);
+
+    useEffect(() => {
+        if (!hasHydratedFromCache) return;
+
+        if (shouldSkipNextLoad) {
+            setShouldSkipNextLoad(false);
+            return;
+        }
+
         let cancelled = false;
 
         async function load() {
@@ -23,7 +69,7 @@ export function DrinkPage() {
                 setLoading(true);
                 const { drinks: newDrinks, totalPages } = await fetchDrinks(
                     page,
-                    searchQuery
+                    searchQuery,
                 );
                 if (cancelled) return;
 
@@ -43,7 +89,23 @@ export function DrinkPage() {
         return () => {
             cancelled = true;
         };
-    }, [page, searchQuery]);
+    }, [page, searchQuery, hasHydratedFromCache, shouldSkipNextLoad]);
+
+    useEffect(() => {
+        if (!hasHydratedFromCache) return;
+
+        const cache: CachedState = {
+            drinks,
+            page,
+            totalPages,
+            searchQuery,
+        };
+
+        try {
+            sessionStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+        } catch {
+        }
+    }, [drinks, page, totalPages, searchQuery, hasHydratedFromCache]);
 
     useEffect(() => {
         const target = sentinelRef.current;
@@ -62,8 +124,8 @@ export function DrinkPage() {
         return () => observer.disconnect();
     }, [loading, page, totalPages]);
 
+    // handlers
     function handleSearch(query: string) {
-        // reset list and paging when a new search occurs
         setDrinks([]);
         setPage(1);
         setTotalPages(null);
@@ -71,9 +133,13 @@ export function DrinkPage() {
         setSearchQuery(query);
     }
 
+
     return (
         <>
-            <Navbar onSearch={handleSearch} />
+            <Navbar
+                onSearch={handleSearch}
+            />
+
             <div className="drink_page">
                 {error && <p className="error_text">API error: {error}</p>}
 

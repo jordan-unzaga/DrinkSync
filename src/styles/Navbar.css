@@ -78,6 +78,7 @@
 
 .nav_search_button {
     height: 32px;
+    margin-left: 1rem;
     padding: 0 12px;
     border-radius: 999px;
     border: none;
