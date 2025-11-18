@@ -1,32 +1,27 @@
-export type Drink = {
-    name?: string;
-    description?: string;
-    alcoholic?: boolean;
-    rating?: number;
-    icon?: string;
-};
+import type { Drink } from "../api/fetchDrinks";
 
-export function DrinkCard(drink: Drink) {
-    const {
-        name = "Unknown Drink",
-        description = "No description available.",
-        alcoholic = false,
-        rating = 0,
-        icon = "/empty.png"
-    } = drink;
-
+export function DrinkCard({ name, rating, icon, alcoholic, ingredients }: Drink) {
     return (
         <li className="drink_card">
-            <img className="drink_image" src={icon} alt={name} />
+            <img src={icon} alt={name} className="drink_image" />
 
-            <h3 className="name">{name}</h3>
+            <h2 className="name">{name}</h2>
 
-            <div className="rating">{Number(rating).toFixed(1)}★</div>
+            {/*<div className="rating">Rating: {rating}</div>*/}
 
-            <p className="desc">{description}</p>
-
-            <div className={`tag ${alcoholic ? "alcoholic" : "non-alcoholic"}`}>
+            <div
+                className={`tag ${alcoholic ? "alcoholic" : "non-alcoholic"}`}
+            >
                 {alcoholic ? "Alcoholic" : "Non-Alcoholic"}
+            </div>
+
+            <div className="ingredients">
+                <h4>Ingredients</h4>
+                <ul>
+                    {ingredients.map((item, i) => (
+                        <li key={i}>{item}</li>
+                    ))}
+                </ul>
             </div>
         </li>
     );

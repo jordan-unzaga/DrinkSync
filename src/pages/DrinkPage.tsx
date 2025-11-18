@@ -5,13 +5,13 @@ import { Navbar } from "../components/Navbar";
 import "../styles/DrinkCard.css";
 import "../styles/Navbar.css";
 
-
 export function DrinkPage() {
     const [drinks, setDrinks] = useState<Drink[]>([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState<number | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [searchQuery, setSearchQuery] = useState("");
 
     const sentinelRef = useRef<HTMLDivElement | null>(null);
 
@@ -22,10 +22,10 @@ export function DrinkPage() {
             try {
                 setLoading(true);
                 const { drinks: newDrinks, totalPages } = await fetchDrinks(
-                    page
+                    page,
+                    searchQuery
                 );
                 if (cancelled) return;
-                console.log(drinks)
 
                 setDrinks((prev) => [...prev, ...newDrinks]);
                 setTotalPages(totalPages);
@@ -43,7 +43,7 @@ export function DrinkPage() {
         return () => {
             cancelled = true;
         };
-    }, [page]);
+    }, [page, searchQuery]);
 
     useEffect(() => {
         const target = sentinelRef.current;
@@ -62,14 +62,23 @@ export function DrinkPage() {
         return () => observer.disconnect();
     }, [loading, page, totalPages]);
 
+    function handleSearch(query: string) {
+        // reset list and paging when a new search occurs
+        setDrinks([]);
+        setPage(1);
+        setTotalPages(null);
+        setError(null);
+        setSearchQuery(query);
+    }
+
     return (
         <>
-            <Navbar />
+            <Navbar onSearch={handleSearch} />
             <div className="drink_page">
                 {error && <p className="error_text">API error: {error}</p>}
 
                 <p className="debug_text">
-                    Debug: drinks={drinks.length} page={page}
+                    Debug: drinks={drinks.length} page={page} query="{searchQuery}"
                 </p>
 
                 <ul className="drink_list">

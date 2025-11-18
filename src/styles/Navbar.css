@@ -1,17 +1,17 @@
-/*                                  Navbar                                 = */
 .nav {
     position: sticky;
     top: 0;
     z-index: 20;
-    background: rgba(0, 0, 0, 0.95);
-    border-bottom: 1px solid #333;
-    backdrop-filter: blur(10px);
+    background: var(--bg-light);
+    border-bottom: 1px solid var(--border-soft);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
 }
 
 .nav_inner {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 10px 16px;
+    padding: 10px 18px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -22,64 +22,67 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
+    font-weight: 800;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    font-size: 0.9rem;
+    font-size: 0.78rem;
+    color: var(--text-main);
+    opacity: 0.92;
 }
 
 .nav_links {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
 }
 
 .nav_link {
-    font-size: 0.9rem;
-    padding: 6px 12px;
+    font-size: 0.86rem;
+    padding: 7px 14px;
     border-radius: 999px;
     text-decoration: none;
-    color: #ddd;
+    color: var(--text-muted);
+    background: transparent;
     border: 1px solid transparent;
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    transition: 0.18s ease;
 }
 
 .nav_link:hover {
-    background: #111;
-    border-color: #fff;
-    color: #fff;
+    background: var(--bg-lighter);
+    border-color: var(--acc1);
+    color: var(--text-main);
+    transform: translateY(-1px);
 }
 
 .nav_link--active {
-    background: #fff;
-    color: #000;
+    background: var(--acc1);
+    color: var(--text-inverse);
+    border-color: var(--acc1);
 }
 
-@media (max-width: 600px) {
-    .nav_inner {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+/* search */
+.nav_search_input {
+    height: 32px;
+    padding: 0 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border-soft);
+    background: var(--bg-main);
+    color: var(--text-main);
 }
 
-.drinks_btn {
-    background: #00e1ff;
-    color: #000;
-    font-weight: 700;
+.nav_search_input:focus {
+    border-color: var(--acc1);
+    background: var(--bg-light);
 }
 
-.drinks_btn:hover {
-    background: #00ffff;
-}
-
-
-.nav_toggle_test {
-    background: #444;
-    color: #fff;
+.nav_search_button {
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 999px;
     border: none;
-    padding: 6px 10px;
-    border-radius: 6px;
     cursor: pointer;
+    background: var(--acc1);
+    color: var(--text-inverse);
+    font-weight: 600;
 }
-
-
