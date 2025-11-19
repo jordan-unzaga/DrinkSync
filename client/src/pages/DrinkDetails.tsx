@@ -49,6 +49,11 @@ export default function DrinkDetails() {
             >
                 Save Drink
             </button>
+            <button
+                className="remove_button"
+            >
+                Remove Drink
+            </button>
         </div>
     );
 }
