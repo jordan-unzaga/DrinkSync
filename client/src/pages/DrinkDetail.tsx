@@ -1,7 +1,9 @@
 import { useLocation, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../styles/DrinkDetail.css";
+import Navbar from "../components/Navbar";
 import "../styles/Navbar.css";
+
 
 export default function DrinkDetail() {
     const { id } = useParams();
@@ -26,37 +28,46 @@ export default function DrinkDetail() {
     if (!drink) return <p>Error: drink data missing.</p>;
 
     return (
-        <div className="drink_detail">
-            <img src={drink.icon} alt={drink.name} className="detail_image" />
 
-            <h1>{drink.name}</h1>
+        <>
+            <Navbar onSearch={function (query: string): void {
+                throw new Error("Function not implemented.");
+            }}            />
 
-            <p className={`tag ${drink.alcoholic ? "alcoholic" : "non-alcoholic"}`}>
-                {drink.alcoholic ? "Alcoholic" : "Non-Alcoholic"}
-            </p>
+            <div className="drink_detail">
+                <img src={drink.icon} alt={drink.name} className="detail_image" />
 
-            <h3>Ingredients</h3>
-            <ul>
-                {drink.ingredients.map((item: string, i: number) => (
-                    <li key={i}>{item}</li>
-                ))}
-            </ul>
+                <h1>{drink.name}</h1>
 
-            <h3>Instructions</h3>
-            <p>{instructions ?? "Loading..."}</p>
+                <p className={`tag ${drink.alcoholic ? "alcoholic" : "non-alcoholic"}`}>
+                    {drink.alcoholic ? "Alcoholic" : "Non-Alcoholic"}
+                </p>
 
-            <button
-                className="save_button"
-                //onClick={() => saveDrink(drink)}
-            >
-                Save Drink
-            </button>
-            <button
-                className="remove_button"
-            >
-                Remove Drink
-            </button>
-        </div>
+                <h3>Ingredients</h3>
+                <ul>
+                    {drink.ingredients.map((item: string, i: number) => (
+                        <li key={i}>{item}</li>
+                    ))}
+                </ul>
+
+                <h3>Instructions</h3>
+                <p>{instructions ?? "Loading..."}</p>
+
+                <button
+                    className="save_button"
+                    //onClick={() => saveDrink(drink)}
+                >
+                    Save Drink
+                </button>
+                <button
+                    className="remove_button"
+                >
+                    Remove Drink
+                </button>
+            </div>
+        </>
+
+
     );
 }
 
