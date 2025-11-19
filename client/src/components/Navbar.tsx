@@ -1,21 +1,44 @@
-import { NavLink } from "react-router-dom";
-import "../styles/navbar.css";
+import { useState, FormEvent } from "react";
 
-export default function Navbar() {
+type NavbarProps = {
+    onSearch: (query: string) => void;
+};
+
+export default function Navbar({ onSearch }: NavbarProps) {
+    const [term, setTerm] = useState("");
+
+    function handleSubmit(e: FormEvent) {
+        e.preventDefault();
+        onSearch(term.trim());
+    }
+
     return (
-        <nav className="navbar">
-            <ul className="nav_links">
-                <li>
-                    <NavLink to="/" end className={({ isActive }) => (isActive ? "active" : "")}>Home</NavLink>
-                </li>
-                <li>
-                    <NavLink to="/about" className={({ isActive }) => (isActive ? "active" : "")}>About</NavLink>
-                </li>
-                <li>
-                    <NavLink to="/drinks" className={({ isActive }) => (isActive ? "active" : "")}>Drinks</NavLink>
-                </li>
-            </ul>
-            <button className="login_btn">Login</button>
-        </nav>
+        <header className="nav">
+            <div className="nav_inner">
+                <div className="nav_brand">
+                    <span role="img" aria-label="drink">🍹</span>
+                    <span>Drink Sync</span>
+                </div>
+
+                <nav className="nav_links">
+                    <a href="/" className="nav_link">Home</a>
+                    <a href="/drinks" className="nav_link">Drinks</a>
+                    <a href="/about" className="nav_link">About</a>
+                </nav>
+
+                <form className="nav_search" onSubmit={handleSubmit}>
+                    <input
+                        type="text"
+                        className="nav_search_input"
+                        placeholder="Search drinks..."
+                        value={term}
+                        onChange={(e) => setTerm(e.target.value)}
+                    />
+                    <button type="submit" className="nav_search_button">
+                        Search
+                    </button>
+                </form>
+            </div>
+        </header>
     );
 }

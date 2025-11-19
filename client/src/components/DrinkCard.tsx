@@ -1,32 +1,28 @@
-import "../styles/drink.css"
+import type { Drink } from "../api/fetchDrinks";
 
-interface DrinkCardProps {
-    id: string;
-    image: string;
-    title: string;
-    alcoholic: string;
-
-}
-
-export default function DrinkCard({
-    id,
-    image,
-    title,
-    alcoholic
-}: DrinkCardProps) {
+export default function DrinkCard({ name, rating, icon, alcoholic, ingredients }: Drink) {
     return (
         <li className="drink_card">
-            <img className="drink_image" src={image} alt="Drink name" />
-            <div className="card_meta">
-                <h3 className="name">{title}</h3>
-                {/*<div className="rating">4.5★</div>*/}
+            <img src={icon} alt={name} className="drink_image" />
 
-                {/*<div className="flavor"><strong>Flavor:</strong> Coffee, Vanilla, Cocoa</div> */}
-                <p className="desc">Smooth, slightly sweet, bold espresso kick.</p>
-                <div className="tag alcoholic">{alcoholic}</div>
-                <button>Save</button>
+            <h2 className="name">{name}</h2>
+
+            {/*<div className="rating">Rating: {rating}</div>*/}
+
+            <div
+                className={`tag ${alcoholic ? "alcoholic" : "non-alcoholic"}`}
+            >
+                {alcoholic ? "Alcoholic" : "Non-Alcoholic"}
+            </div>
+
+            <div className="ingredients">
+                <h4>Ingredients</h4>
+                <ul>
+                    {ingredients.map((item, i) => (
+                        <li key={i}>{item}</li>
+                    ))}
+                </ul>
             </div>
         </li>
-    )
+    );
 }
-        
