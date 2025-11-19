@@ -1,7 +1,9 @@
 import { useLocation, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import "../styles/DrinkDetail.css";
+import "../styles/Navbar.css";
 
-export default function DrinkDetails() {
+export default function DrinkDetail() {
     const { id } = useParams();
     const location = useLocation();
     const drink = location.state; 
@@ -9,7 +11,7 @@ export default function DrinkDetails() {
     const [instructions, setInstructions] = useState<string | null>(null);
 
     useEffect(() => {
-        async function fetchDetails() {
+        async function fetchDetail() {
             const res = await fetch(
                 `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`
             );
@@ -18,13 +20,13 @@ export default function DrinkDetails() {
             setInstructions(json.drinks[0].strInstructions);
         }
 
-        fetchDetails();
+        fetchDetail();
     }, [id]);
 
     if (!drink) return <p>Error: drink data missing.</p>;
 
     return (
-        <div className="drink_details">
+        <div className="drink_detail">
             <img src={drink.icon} alt={drink.name} className="detail_image" />
 
             <h1>{drink.name}</h1>
