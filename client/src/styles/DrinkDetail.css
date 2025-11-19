@@ -1,0 +1,39 @@
+body {
+    background: pink !important;
+}
+.drink_detail_page {
+    display: flex;
+    justify-content: center;
+    padding: 32px 16px;
+}
+
+/* big version of the drink card */
+.drink_card--large {
+    max-width: 640px;
+    width: 100%;
+}
+
+.drink_card--large .drink_image {
+    height: 260px;
+}
+
+.drink_card--large .ingredients {
+    font-size: 1rem;
+}
+
+.drink_card--large h3 {
+    margin-top: 18px;
+}
+
+.save_button,
+.remove_button {
+    margin-top: 12px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+}
+
+.save_button {
+    margin-right: 8px;
+}
