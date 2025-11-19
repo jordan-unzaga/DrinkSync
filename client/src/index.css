@@ -1,29 +1,28 @@
-/*                        Global layout                        */
+
 * {
     box-sizing: border-box;
 }
 
 :root {
-    /* Background shades */
-    --bg-main: #2a2a2a;       /* main dark gray */
-    --bg-light: #1a1a1a;      /* panels, cards */
-    --bg-lighter: #242424;    /* hover or elevated panels */
+    --bg-main: #2a2a2a;       
+    --bg-light: #1a1a1a;      
+    --bg-lighter: #242424;    
 
-    /* Text colors */
+    
     --text-main: #e5e5e5;
     --text-muted: #b3b3b3;
     --text-inverse: #000;
 
-    /* Accent colors (cyan theme) */
+    
     --acc1: #00e1ff;
     --acc1-bright: #00ffff;
 
-    /* Border colors */
+    
     --border-soft: rgba(255, 255, 255, 0.08);
     --border-strong: rgba(255, 255, 255, 0.16);
 }
 
-/* Apply global background */
+
 html, body {
     margin: 0;
     padding: 0;
@@ -42,4 +41,10 @@ html, body {
     margin: 12px 0 24px;
     opacity: 0.8;
     font-size: 0.9rem;
+}
+
+.no_underline {
+    text-decoration: none;
+    color: inherit;          
+    display: block;          
 }
