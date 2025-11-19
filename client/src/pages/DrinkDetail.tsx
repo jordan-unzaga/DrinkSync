@@ -1,30 +1,34 @@
 import { useLocation, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
+
 import "../styles/DrinkCard.css";
 import "../styles/DrinkDetail.css";
 import "../styles/Navbar.css";
+import Navbar from "../components/Navbar";
+import type { Drink } from "../api/fetchDrinks";
 
 export default function DrinkDetail() {
     const { id } = useParams();
     const location = useLocation();
-    const drink = location.state;
+    const drink = location.state as Drink | undefined;
 
     const [instructions, setInstructions] = useState<string | null>(null);
 
     useEffect(() => {
         async function fetchDetail() {
+            if (!id) return;
             const res = await fetch(
                 `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`
             );
             const json = await res.json();
-            setInstructions(json.drinks[0].strInstructions);
+            setInstructions(json.drinks?.[0]?.strInstructions ?? null);
         }
-
         fetchDetail();
     }, [id]);
 
-    if (!drink) return <p>Error: drink data missing.</p>;
+    if (!drink) {
+        return <p>Error: drink data missing.</p>;
+    }
 
     return (
         <>
@@ -45,7 +49,7 @@ export default function DrinkDetail() {
                     <div className="ingredients">
                         <h4>Ingredients</h4>
                         <ul>
-                            {drink.ingredients.map((item: string, i: number) => (
+                            {drink.ingredients.map((item, i) => (
                                 <li key={i}>{item}</li>
                             ))}
                         </ul>
