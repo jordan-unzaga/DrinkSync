@@ -5,7 +5,7 @@ import DrinkDetails from './pages/DrinkDetails';
 
 function App() {
   return (
-    <BrowserRouter basename="/~w62q346/finalproject/drink-sync/client/build">
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<DrinkPage />}/>
         <Route path="/drink/:id" element={<DrinkDetails />} />
