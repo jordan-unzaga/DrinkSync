@@ -14,6 +14,8 @@ export default function DrinkDetail() {
 
     const [instructions, setInstructions] = useState<string | null>(null);
 
+    const [showToast, setShowToast] = useState(false);
+
     useEffect(() => {
         async function fetchDetail() {
             if (!id) return;
@@ -30,9 +32,14 @@ export default function DrinkDetail() {
         return <p>Error: drink data missing.</p>;
     }
 
+    function handleSave() {
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 2000);
+    }
+
     return (
         <>
-            <Navbar onSearch={() => {}} />
+            <Navbar onSearch={() => { }} />
 
             <div className="drink_detail_page">
                 <div className="drink_card drink_card--large">
@@ -57,8 +64,16 @@ export default function DrinkDetail() {
 
                     <h3>Instructions</h3>
                     <p>{instructions ?? "Loading..."}</p>
+
+                    <button className="save_button" onClick={handleSave}>
+                        Save Drink
+                    </button>
                 </div>
             </div>
+
+
+
+            {showToast && (<div className="toast_popup">Drink saved successfully!</div>)}
         </>
     );
 }
