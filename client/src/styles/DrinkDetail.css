@@ -1,3 +1,6 @@
+body {
+    background: pink !important;
+}
 .drink_detail_page {
     display: flex;
     justify-content: center;

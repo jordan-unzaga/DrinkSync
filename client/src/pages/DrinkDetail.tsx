@@ -1,8 +1,8 @@
 import { useLocation, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
 import "../styles/DrinkCard.css";
 import "../styles/DrinkDetail.css";
-import Navbar from "../components/Navbar";
 import "../styles/Navbar.css";
 
 export default function DrinkDetail() {
@@ -53,9 +53,6 @@ export default function DrinkDetail() {
 
                     <h3>Instructions</h3>
                     <p>{instructions ?? "Loading..."}</p>
-
-                    <button className="save_button">Save Drink</button>
-                    <button className="remove_button">Remove Drink</button>
                 </div>
             </div>
         </>
