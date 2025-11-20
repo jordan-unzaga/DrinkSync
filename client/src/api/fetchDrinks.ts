@@ -76,6 +76,7 @@ export async function fetchDrinks(
         }
 
         return {
+            id: d.idDrink,
             name: d.strDrink ?? "Unknown",
             description: "",
             alcoholic: d.strAlcoholic === "Alcoholic",
