@@ -24,52 +24,81 @@
 
 .save_button,
 .remove_button {
-    margin-top: 12px;
-    padding: 8px 16px;
-    border-radius: 999px;
-    border: none;
-    cursor: pointer;
-}
-
-.save_button {
     margin-top: 1.5rem;
     padding: 0.7rem 1.4rem;
     font-size: 1.05rem;
     border-radius: 10px;
     border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition:
+            background-color 0.2s ease,
+            box-shadow 0.2s ease,
+            transform 0.1s ease;
+}
+
+.save_button {
     background-color: #4CAF50;
     color: white;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    font-weight: 500;
+    margin-right: 10px;
 }
 
 .save_button:hover {
     background-color: #45a049;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.55);
+    transform: translateY(-2px);
 }
 
 .save_button:active {
     transform: scale(0.96);
+    box-shadow: 0 0 6px rgba(76, 175, 80, 0.35);
 }
+
+.remove_button {
+    background-color: #e02424;
+    color: white;
+    margin-left: 10px;
+}
+
+.remove_button:hover {
+    background-color: #ca1111;
+    box-shadow: 0 0 10px rgba(255, 80, 80, 0.55);
+    transform: translateY(-2px);
+}
+
+.remove_button:active {
+    transform: scale(0.96);
+    box-shadow: 0 0 6px rgba(255, 80, 80, 0.35);
+}
+
 
 .toast_popup {
     position: fixed;
     top: 22px;
     left: 50%;
     transform: translateX(-50%);
-    background: #333;
-    color: white;
+
+    background: radial-gradient(circle at top, #0f0f0f, #1a1a1a 60%);
+    color: var(--text-main);
+
     padding: 0.85rem 1.3rem;
-    border-radius: 10px;
+    border-radius: 12px;
+
     font-size: 1rem;
-    opacity: 0.95;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+
+    border: 1px solid rgba(0, 225, 255, 0.25);
+    box-shadow: 0 0 14px rgba(0, 225, 255, 0.25);
+
+    opacity: 0;
     z-index: 9999;
-    animation: fadeinout 2s ease forwards;
+    animation: toast_fade 2.2s ease forwards;
 }
 
-@keyframes fadeinout {
+@keyframes toast_fade {
     0%   { opacity: 0; transform: translate(-50%, -20px); }
-    10%  { opacity: 0.95; transform: translate(-50%, 0); }
-    90%  { opacity: 0.95; transform: translate(-50%, 0); }
+    10%  { opacity: 1; transform: translate(-50%, 0); }
+    80%  { opacity: 1; transform: translate(-50%, 0); }
     100% { opacity: 0; transform: translate(-50%, -20px); }
 }

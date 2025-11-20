@@ -1,5 +1,5 @@
 import { useLocation, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Navbar from "../components/Navbar";
 import type { Drink } from "../api/fetchDrink";
 
@@ -25,6 +25,32 @@ export default function DrinkDetail() {
     const [instructions, setInstructions] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    // toast state
+    const [toastMessage, setToastMessage] = useState<string | null>(null);
+    const toastTimeoutRef = useRef<number | undefined>(undefined);
+
+    function showToast(message: string) {
+        setToastMessage(message);
+
+        if (toastTimeoutRef.current !== undefined) {
+            window.clearTimeout(toastTimeoutRef.current);
+        }
+
+        toastTimeoutRef.current = window.setTimeout(() => {
+            setToastMessage(null);
+        }, 2000); // matches your CSS animation
+    }
+
+    function handleSaveClick() {
+        // TODO: real save logic later
+        showToast("Drink saved!");
+    }
+
+    function handleRemoveClick() {
+        // TODO: real remove logic later
+        showToast("Drink removed.");
+    }
 
     useEffect(() => {
         if (!id) {
@@ -77,6 +103,12 @@ export default function DrinkDetail() {
         }
 
         fetchDetail();
+
+        return () => {
+            if (toastTimeoutRef.current !== undefined) {
+                window.clearTimeout(toastTimeoutRef.current);
+            }
+        };
     }, [id]);
 
     return (
@@ -114,9 +146,19 @@ export default function DrinkDetail() {
                         <p>{instructions ?? "No instructions available."}</p>
 
                         <div className="button_row">
-                            <button className="save_button">Save Drink</button>
-                            <button className="remove_button">Remove Drink</button>
+                            <button className="save_button" onClick={handleSaveClick}>
+                                Save Drink
+                            </button>
+                            <button className="remove_button" onClick={handleRemoveClick}>
+                                Remove Drink
+                            </button>
                         </div>
+                    </div>
+                )}
+
+                {toastMessage && (
+                    <div className="toast_popup">
+                        {toastMessage}
                     </div>
                 )}
             </div>
