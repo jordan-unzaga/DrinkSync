@@ -142,9 +142,9 @@ export function DrinkPage() {
             <div className="drink_page">
                 {error && <p className="error_text">API error: {error}</p>}
 
-                <p className="debug_text">
+                {/*<p className="debug_text">
                     Debug: drinks={drinks.length} page={page} query="{searchQuery}"
-                </p>
+                </p> */}
 
                 <ul className="drink_list">
                     {drinks.map((drink, i) => (

@@ -1,6 +1,5 @@
 import { useState, FormEvent } from "react";
 import { Link } from "react-router-dom";
-import logo from "../../public/DrinkSyncLogo.png";
 
 type NavbarProps = {
     onSearch: (query: string) => void;
@@ -19,7 +18,8 @@ export default function Navbar({ onSearch }: NavbarProps) {
             <div className="nav_inner">
 
                 <div className="nav_brand">
-                    <img src={logo} alt="Drink Sync Logo" className="nav_logo" />
+                    <img src={`${process.env.PUBLIC_URL}/DrinkSyncLogo.png`} alt="Drink Sync Logo" className="nav_logo" />
+                    <span>DRINK SYNC</span>
                 </div>
 
                 <nav className="nav_links">
