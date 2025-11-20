@@ -1,4 +1,4 @@
-import type { Drink } from "../api/fetchDrinks";
+import type { Drink } from "../api/fetchDrink";
 import { Link } from "react-router-dom"
 
 export default function DrinkCard({ id, name, rating, icon, alcoholic, ingredients }: Drink) {

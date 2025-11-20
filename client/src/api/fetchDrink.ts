@@ -10,7 +10,7 @@ export type Drink = {
 
 const PAGE_SIZE = 10;
 
-export async function fetchDrinks(
+export async function fetchDrink(
     page: number = 1,
     query: string = ""
 ): Promise<{ drinks: Drink[]; totalPages: number }> {

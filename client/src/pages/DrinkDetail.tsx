@@ -1,79 +1,125 @@
 import { useLocation, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
+import type { Drink } from "../api/fetchDrink";
 
 import "../styles/DrinkCard.css";
 import "../styles/DrinkDetail.css";
 import "../styles/Navbar.css";
-import Navbar from "../components/Navbar";
-import type { Drink } from "../api/fetchDrinks";
+
+type ApiDrink = {
+    idDrink: string;
+    strDrink: string;
+    strDrinkThumb: string;
+    strAlcoholic: string;
+    strInstructions: string | null;
+    [key: string]: any;
+};
 
 export default function DrinkDetail() {
     const { id } = useParams();
     const location = useLocation();
-    const drink = location.state as Drink | undefined;
+    const initialDrink = location.state as Drink | undefined;
 
+    const [drink, setDrink] = useState<Drink | null>(initialDrink ?? null);
     const [instructions, setInstructions] = useState<string | null>(null);
-
-    const [showToast, setShowToast] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        async function fetchDetail() {
-            if (!id) return;
-            const res = await fetch(
-                `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`
-            );
-            const json = await res.json();
-            setInstructions(json.drinks?.[0]?.strInstructions ?? null);
+        if (!id) {
+            setError("Missing drink id.");
+            return;
         }
+
+        async function fetchDetail() {
+            try {
+                setLoading(true);
+                setError(null);
+
+                const res = await fetch(
+                    `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`
+                );
+                if (!res.ok) throw new Error(`API error: ${res.status}`);
+                const json = await res.json();
+
+                const apiDrink: ApiDrink | undefined = json.drinks?.[0];
+                if (!apiDrink) {
+                    throw new Error("Drink not found.");
+                }
+
+                const ingredients: string[] = [];
+                for (let i = 1; i <= 15; i++) {
+                    const key = `strIngredient${i}`;
+                    const value = apiDrink[key];
+                    if (value && typeof value === "string") {
+                        ingredients.push(value);
+                    }
+                }
+
+                const mappedDrink: Drink = {
+                    id: apiDrink.idDrink,
+                    name: apiDrink.strDrink,
+                    description: "",
+                    alcoholic: apiDrink.strAlcoholic.toLowerCase().includes("alcohol"),
+                    rating: 0,
+                    icon: apiDrink.strDrinkThumb,
+                    ingredients,
+                };
+
+                setDrink(mappedDrink);
+                setInstructions(apiDrink.strInstructions ?? null);
+            } catch (err: any) {
+                setError(err.message ?? "Failed to load drink.");
+            } finally {
+                setLoading(false);
+            }
+        }
+
         fetchDetail();
     }, [id]);
 
-    if (!drink) {
-        return <p>Error: drink data missing.</p>;
-    }
-
-    function handleSave() {
-        setShowToast(true);
-        setTimeout(() => setShowToast(false), 2000);
-    }
-
     return (
         <>
-            <Navbar onSearch={() => { }} />
+            <Navbar onSearch={() => {}} />
 
             <div className="drink_detail_page">
-                <div className="drink_card drink_card--large">
-                    <img src={drink.icon} alt={drink.name} className="drink_image" />
+                {loading && <p className="loading_text">Loading drink…</p>}
+                {error && <p className="error_text">{error}</p>}
 
-                    <h2 className="name">{drink.name}</h2>
+                {drink && !loading && !error && (
+                    <div className="drink_card drink_card--large">
+                        <img src={drink.icon} alt={drink.name} className="drink_image" />
 
-                    <div
-                        className={`tag ${drink.alcoholic ? "alcoholic" : "non-alcoholic"}`}
-                    >
-                        {drink.alcoholic ? "Alcoholic" : "Non-Alcoholic"}
+                        <h2 className="name">{drink.name}</h2>
+
+                        <div
+                            className={`tag ${
+                                drink.alcoholic ? "alcoholic" : "non-alcoholic"
+                            }`}
+                        >
+                            {drink.alcoholic ? "Alcoholic" : "Non-Alcoholic"}
+                        </div>
+
+                        <div className="ingredients">
+                            <h4>Ingredients</h4>
+                            <ul>
+                                {drink.ingredients.map((item, i) => (
+                                    <li key={i}>{item}</li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        <h3>Instructions</h3>
+                        <p>{instructions ?? "No instructions available."}</p>
+
+                        <div className="button_row">
+                            <button className="save_button">Save Drink</button>
+                            <button className="remove_button">Remove Drink</button>
+                        </div>
                     </div>
-
-                    <div className="ingredients">
-                        <h4>Ingredients</h4>
-                        <ul>
-                            {drink.ingredients.map((item, i) => (
-                                <li key={i}>{item}</li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    <h3>Instructions</h3>
-                    <p>{instructions ?? "Loading..."}</p>
-
-                    <button className="save_button" onClick={handleSave}>
-                        Save Drink
-                    </button>
-                </div>
+                )}
             </div>
-
-
-
-            {showToast && (<div className="toast_popup">Drink saved successfully!</div>)}
         </>
     );
 }

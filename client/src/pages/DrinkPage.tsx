@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { fetchDrinks, type Drink } from "../api/fetchDrinks";
+import { fetchDrink, type Drink } from "../api/fetchDrink";
 
 import "../styles/DrinkCard.css";
 import "../styles/Navbar.css";
@@ -65,7 +65,7 @@ export function DrinkPage() {
         async function load() {
             try {
                 setLoading(true);
-                const { drinks: newDrinks, totalPages } = await fetchDrinks(
+                const { drinks: newDrinks, totalPages } = await fetchDrink(
                     page,
                     searchQuery
                 );
