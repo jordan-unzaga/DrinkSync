@@ -9,7 +9,6 @@ import Navbar from "../components/Navbar";
 const CACHE_KEY = "drink_page_state_v1";
 
 type CachedState = {
-    page: number;
     totalPages: number | null;
     searchQuery: string;
 };
@@ -33,7 +32,7 @@ export function DrinkPage() {
             try {
                 const parsed: CachedState = JSON.parse(raw);
 
-                setPage(parsed.page ?? 1);
+                setPage(1);
                 setTotalPages(typeof parsed.totalPages === "number" ? parsed.totalPages : null);
                 setSearchQuery(parsed.searchQuery ?? "");
 
@@ -81,7 +80,6 @@ export function DrinkPage() {
         if (!hasHydratedFromCache) return;
 
         const cache: CachedState = {
-            page,
             totalPages,
             searchQuery,
         };
