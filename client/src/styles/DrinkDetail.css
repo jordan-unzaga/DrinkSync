@@ -42,6 +42,7 @@
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.1s ease;
     font-weight: 500;
+    margin-right: 10px;
 }
 
 .save_button:hover {
@@ -49,6 +50,28 @@
 }
 
 .save_button:active {
+    transform: scale(0.96);
+}
+
+.remove_button {
+    margin-top: 1.5rem;
+    padding: 0.7rem 1.4rem;
+    font-size: 1.05rem;
+    border-radius: 10px;
+    border: none;
+    background-color: #e02424;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    font-weight: 500;
+    margin-left: 10px;
+}
+
+.remove_button:hover {
+    background-color: #ca1111;
+}
+
+.remove_button:active {
     transform: scale(0.96);
 }
 
