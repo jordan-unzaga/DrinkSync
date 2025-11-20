@@ -8,6 +8,14 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
 }
 
+.nav_logo {
+    height: 40px;
+    width: auto;
+    margin-right: 12px;
+    filter: drop-shadow(0 0 4px rgba(0, 225, 255, 0.4));
+}
+
+
 .nav_inner {
     max-width: 1100px;
     margin: 0 auto;
