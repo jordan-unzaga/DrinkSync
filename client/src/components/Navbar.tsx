@@ -1,4 +1,5 @@
 import { useState, FormEvent } from "react";
+import { Link } from "react-router-dom";
 
 type NavbarProps = {
     onSearch: (query: string) => void;
@@ -15,15 +16,24 @@ export default function Navbar({ onSearch }: NavbarProps) {
     return (
         <header className="nav">
             <div className="nav_inner">
+
                 <div className="nav_brand">
                     <span role="img" aria-label="drink">🍹</span>
                     <span>Drink Sync</span>
                 </div>
 
                 <nav className="nav_links">
-                    <a href="/" className="nav_link">Home</a>
-                    <a href="/drinks" className="nav_link">Drinks</a>
-                    <a href="/about" className="nav_link">About</a>
+                    <Link to="/" className="nav_link">
+                        Home
+                    </Link>
+
+                    <a href="#" className="nav_link">
+                        Saved Drinks
+                    </a>
+
+                    <Link to="/about" className="nav_link">
+                        About
+                    </Link>
                 </nav>
 
                 <form className="nav_search" onSubmit={handleSubmit}>

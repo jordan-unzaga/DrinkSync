@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import {fetchDrinks, type Drink } from "../api/fetchDrinks";
+import { fetchDrinks, type Drink } from "../api/fetchDrinks";
 
 import "../styles/DrinkCard.css";
 import "../styles/Navbar.css";
@@ -9,8 +9,10 @@ import Navbar from "../components/Navbar";
 const CACHE_KEY = "drink_page_state_v1";
 
 type CachedState = {
+    page: number;
     totalPages: number | null;
     searchQuery: string;
+    drinks: Drink[];
 };
 
 export function DrinkPage() {
@@ -23,19 +25,22 @@ export function DrinkPage() {
     const [searchVersion, setSearchVersion] = useState(0);
 
     const [hasHydratedFromCache, setHasHydratedFromCache] = useState(false);
-
     const sentinelRef = useRef<HTMLDivElement | null>(null);
+    const hasFetchedOnceRef = useRef(false);
 
+    // try to get from cache
     useEffect(() => {
         const raw = sessionStorage.getItem(CACHE_KEY);
         if (raw) {
             try {
                 const parsed: CachedState = JSON.parse(raw);
 
-                setPage(1);
-                setTotalPages(typeof parsed.totalPages === "number" ? parsed.totalPages : null);
+                setPage(parsed.page ?? 1);
+                setTotalPages(
+                    typeof parsed.totalPages === "number" ? parsed.totalPages : null
+                );
                 setSearchQuery(parsed.searchQuery ?? "");
-
+                setDrinks(parsed.drinks ?? []);
             } catch {
                 sessionStorage.removeItem(CACHE_KEY);
             }
@@ -44,8 +49,16 @@ export function DrinkPage() {
         setHasHydratedFromCache(true);
     }, []);
 
+// load more data, skips if items already cached
     useEffect(() => {
         if (!hasHydratedFromCache) return;
+
+        if (!hasFetchedOnceRef.current && drinks.length > 0) {
+            hasFetchedOnceRef.current = true;
+            return;
+        }
+
+        hasFetchedOnceRef.current = true;
 
         let cancelled = false;
 
@@ -54,7 +67,7 @@ export function DrinkPage() {
                 setLoading(true);
                 const { drinks: newDrinks, totalPages } = await fetchDrinks(
                     page,
-                    searchQuery,
+                    searchQuery
                 );
                 if (cancelled) return;
 
@@ -76,12 +89,15 @@ export function DrinkPage() {
         };
     }, [page, searchQuery, searchVersion, hasHydratedFromCache]);
 
+    // cache in session storage
     useEffect(() => {
         if (!hasHydratedFromCache) return;
 
         const cache: CachedState = {
+            page,
             totalPages,
             searchQuery,
+            drinks,
         };
 
         try {
@@ -90,12 +106,12 @@ export function DrinkPage() {
         }
     }, [drinks, page, totalPages, searchQuery, hasHydratedFromCache]);
 
+    // infinite scroll functionality
     useEffect(() => {
         const target = sentinelRef.current;
         if (!target) return;
 
         if (page === 1 && drinks.length === 0) return;
-
         if (totalPages !== null && page >= totalPages) return;
 
         const observer = new IntersectionObserver((entries) => {
@@ -109,24 +125,19 @@ export function DrinkPage() {
         return () => observer.disconnect();
     }, [loading, page, totalPages, drinks.length]);
 
-    // handlers
+// search handler
     function handleSearch(query: string) {
         setDrinks([]);
         setPage(1);
         setTotalPages(null);
         setError(null);
-
         setSearchQuery(query);
-
-        setSearchVersion(v => v + 1);
+        setSearchVersion((v) => v + 1);
     }
-
 
     return (
         <>
-            <Navbar
-                onSearch={handleSearch}
-            />
+            <Navbar onSearch={handleSearch} />
 
             <div className="drink_page">
                 {error && <p className="error_text">API error: {error}</p>}

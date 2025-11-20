@@ -1,0 +1,15 @@
+.about_page {
+    max-width: 720px;
+    margin: 40px auto;
+    padding: 20px;
+    line-height: 1.6;
+    color: var(--text-main);
+}
+
+.about_page h1 {
+    margin-bottom: 16px;
+}
+
+.about_page h2 {
+    margin-top: 28px;
+}
