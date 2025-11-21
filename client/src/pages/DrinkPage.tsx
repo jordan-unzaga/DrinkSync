@@ -71,8 +71,13 @@ export function DrinkPage() {
                 );
                 if (cancelled) return;
 
-                setDrinks((prev) => [...prev, ...newDrinks]);
+                setDrinks((prev) => {
+                    const existingIds = new Set(prev.map((d) => d.id));
+                    const uniqueNew = newDrinks.filter((d) => !existingIds.has(d.id));
+                    return [...prev, ...uniqueNew];
+                });
                 setTotalPages(totalPages);
+
             } catch (err: any) {
                 if (!cancelled) {
                     setError(err.message ?? "Unknown error");

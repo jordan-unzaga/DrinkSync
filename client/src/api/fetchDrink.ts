@@ -1,11 +1,12 @@
 export type Drink = {
-    id: string,
+    id: string;
     name: string;
     description: string;
     alcoholic: boolean;
     rating: number;
     icon: string;
     ingredients: string[];
+    instructions: string | null;
 };
 
 const PAGE_SIZE = 10;
@@ -15,7 +16,7 @@ export async function fetchDrink(
     query: string = ""
 ): Promise<{ drinks: Drink[]; totalPages: number }> {
 
-// if no query
+    // if no query
     if (query.trim() === "") {
         const promises = Array.from({ length: PAGE_SIZE }, () =>
             fetch("https://www.thecocktaildb.com/api/json/v1/1/random.php")
@@ -46,14 +47,15 @@ export async function fetchDrink(
                     alcoholic: d.strAlcoholic === "Alcoholic",
                     rating: 0,
                     icon: d.strDrinkThumb ?? "/empty.png",
-                    ingredients
+                    ingredients,
+                    instructions: d.strInstructions ?? null,
                 };
             });
 
         return { drinks, totalPages: Number.POSITIVE_INFINITY };
     }
 
-// if query
+    // if query
     const res = await fetch(
         `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${query}`
     );
@@ -82,7 +84,8 @@ export async function fetchDrink(
             alcoholic: d.strAlcoholic === "Alcoholic",
             rating: 0,
             icon: d.strDrinkThumb ?? "/empty.png",
-            ingredients
+            ingredients,
+            instructions: d.strInstructions ?? null,
         };
     });
 

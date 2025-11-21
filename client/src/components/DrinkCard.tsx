@@ -1,23 +1,20 @@
 import type { Drink } from "../api/fetchDrink";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
-export default function DrinkCard({ id, name, rating, icon, alcoholic, ingredients }: Drink) {
+export default function DrinkCard(drink: Drink) {
+    const { id, name, rating, icon, alcoholic, ingredients } = drink;
+
     return (
         <li className="drink_card">
             <Link
                 to={`/drink/${id}`}
-                state={{ id, name, rating, icon, alcoholic, ingredients }}
+                state={drink}
                 className="no_underline"
             >
                 <img src={icon} alt={name} className="drink_image" />
-
                 <h2 className="name">{name}</h2>
 
-                {/*<div className="rating">Rating: {rating}</div>*/}
-
-                <div
-                    className={`tag ${alcoholic ? "alcoholic" : "non-alcoholic"}`}
-                >
+                <div className={`tag ${alcoholic ? "alcoholic" : "non-alcoholic"}`}>
                     {alcoholic ? "Alcoholic" : "Non-Alcoholic"}
                 </div>
 

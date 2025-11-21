@@ -22,7 +22,6 @@ export default function DrinkDetail() {
     const initialDrink = location.state as Drink | undefined;
 
     const [drink, setDrink] = useState<Drink | null>(initialDrink ?? null);
-    const [instructions, setInstructions] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -39,22 +38,25 @@ export default function DrinkDetail() {
 
         toastTimeoutRef.current = window.setTimeout(() => {
             setToastMessage(null);
-        }, 2000); // matches your CSS animation
+        }, 2000);
     }
 
     function handleSaveClick() {
-        // TODO: real save logic later
         showToast("Drink saved!");
     }
 
     function handleRemoveClick() {
-        // TODO: real remove logic later
         showToast("Drink removed.");
     }
 
     useEffect(() => {
         if (!id) {
             setError("Missing drink id.");
+            return;
+        }
+
+        // If we already have a full drink with instructions, don't fetch
+        if (drink && drink.instructions) {
             return;
         }
 
@@ -91,10 +93,10 @@ export default function DrinkDetail() {
                     rating: 0,
                     icon: apiDrink.strDrinkThumb,
                     ingredients,
+                    instructions: apiDrink.strInstructions ?? null,
                 };
 
                 setDrink(mappedDrink);
-                setInstructions(apiDrink.strInstructions ?? null);
             } catch (err: any) {
                 setError(err.message ?? "Failed to load drink.");
             } finally {
@@ -102,14 +104,17 @@ export default function DrinkDetail() {
             }
         }
 
-        fetchDetail();
+        // Only fetch if we *don't* have a drink with instructions yet
+        if (!drink) {
+            fetchDetail();
+        }
 
         return () => {
             if (toastTimeoutRef.current !== undefined) {
                 window.clearTimeout(toastTimeoutRef.current);
             }
         };
-    }, [id]);
+    }, [id, drink]);
 
     return (
         <>
@@ -143,7 +148,7 @@ export default function DrinkDetail() {
                         </div>
 
                         <h3>Instructions</h3>
-                        <p>{instructions ?? "No instructions available."}</p>
+                        <p>{drink.instructions ?? "No instructions available."}</p>
 
                         <div className="button_row">
                             <button className="save_button" onClick={handleSaveClick}>
@@ -156,11 +161,7 @@ export default function DrinkDetail() {
                     </div>
                 )}
 
-                {toastMessage && (
-                    <div className="toast_popup">
-                        {toastMessage}
-                    </div>
-                )}
+                {toastMessage && <div className="toast_popup">{toastMessage}</div>}
             </div>
         </>
     );
