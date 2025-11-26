@@ -1,6 +1,5 @@
 import { useLocation, useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
-import Navbar from "../components/Navbar";
 import type { Drink } from "../api/fetchDrink";
 
 import "../styles/DrinkCard.css";
@@ -118,7 +117,6 @@ export default function DrinkDetail() {
 
     return (
         <>
-            <Navbar onSearch={() => {}} />
 
             <div className="drink_detail_page">
                 {loading && <p className="loading_text">Loading drink…</p>}
