@@ -28,7 +28,6 @@ export default function AuthForm() {
         const data = await response.json();
 
         if (data.success) {
-            alert(action === "login" ? "Logged in jit" : "Account created jit");
             navigate("/drinkpage");
         } else {
             alert(data.message || "Something went wrong jit");

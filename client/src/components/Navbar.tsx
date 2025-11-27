@@ -1,5 +1,5 @@
 import { useState, FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/Navbar.css";
 
 type NavbarProps = {
@@ -8,6 +8,20 @@ type NavbarProps = {
 
 export default function Navbar({ onSearch }: NavbarProps) {
     const [term, setTerm] = useState("");
+    const navigate = useNavigate();
+
+    function handleLogout() {
+        fetch("https://csci331vm.cs.montana.edu/~w62q346/finalproject/drink-sync/server/logout.php", {
+            credentials: "include"
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                sessionStorage.clear();
+                navigate("/login");
+            }
+        });
+    }
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
@@ -39,7 +53,11 @@ export default function Navbar({ onSearch }: NavbarProps) {
                         </Link>
                     </nav>
 
+                    <button onClick={handleLogout}>Logout</button>
+
                 </div>
+
+
 
                 <div className="nav_right">
                     <form className="nav_search" onSubmit={handleSubmit}>
