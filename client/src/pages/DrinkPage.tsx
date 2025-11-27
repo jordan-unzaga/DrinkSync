@@ -5,6 +5,7 @@ import "../styles/DrinkCard.css";
 import "../styles/Navbar.css";
 import DrinkCard from "../components/DrinkCard";
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 
 const CACHE_KEY = "drink_page_state_v1";
 
@@ -27,6 +28,18 @@ export function DrinkPage() {
     const [hasHydratedFromCache, setHasHydratedFromCache] = useState(false);
     const sentinelRef = useRef<HTMLDivElement | null>(null);
     const hasFetchedOnceRef = useRef(false);
+
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        fetch("/~w62q346/finalproject/drink-sync/server/checkAuth.php", {
+            credentials: "include"
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (!data.logged_in) navigate("/login")
+        })
+    }, []);
 
     // try to get from cache
     useEffect(() => {
