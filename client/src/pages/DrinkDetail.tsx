@@ -41,11 +41,37 @@ export default function DrinkDetail() {
     }
 
     function handleSaveClick() {
-        showToast("Drink saved!");
+        fetch("https://csci331vm.cs.montana.edu/~w62q346/finalproject/drink-sync/server/saveDrink.php", {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ drink_id: drink?.id })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    showToast("Drink saved!");
+                } else {
+                    showToast("Error: " + data.error);
+                }
+            });
     }
 
     function handleRemoveClick() {
-        showToast("Drink removed.");
+        fetch("https://csci331vm.cs.montana.edu/~w62q346/finalproject/drink-sync/server/removeDrink.php", {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ drink_id: drink?.id })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    showToast("Drink removed.");
+                } else {
+                    showToast("Error: " + data.error);
+                }
+            });
     }
 
     useEffect(() => {
@@ -129,9 +155,8 @@ export default function DrinkDetail() {
                         <h2 className="name">{drink.name}</h2>
 
                         <div
-                            className={`tag ${
-                                drink.alcoholic ? "alcoholic" : "non-alcoholic"
-                            }`}
+                            className={`tag ${drink.alcoholic ? "alcoholic" : "non-alcoholic"
+                                }`}
                         >
                             {drink.alcoholic ? "Alcoholic" : "Non-Alcoholic"}
                         </div>
