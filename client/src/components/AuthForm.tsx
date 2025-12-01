@@ -5,12 +5,10 @@ export default function AuthForm() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+    const [action, setAction] = useState("login");
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        const actionButton = document.activeElement as HTMLButtonElement;
-        const action = actionButton.value;
 
         const endpoint = action === "login"
             ? "https://csci331vm.cs.montana.edu/~w62q346/finalproject/drink-sync/server/login.php"
@@ -51,11 +49,11 @@ export default function AuthForm() {
                 />
 
                 <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-                    <button type="submit" name="action" value="login">
+                    <button type="submit" onClick={() => setAction("login")} value="login">
                         Login
                     </button>
 
-                    <button type="submit" name="action" value="register">
+                    <button type="submit" onClick={() => setAction("register")} value="register">
                         Register
                     </button>
                 </div>

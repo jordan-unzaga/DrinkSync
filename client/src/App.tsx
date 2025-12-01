@@ -3,6 +3,7 @@ import { DrinkPage } from "./pages/DrinkPage";
 import DrinkDetail from "./pages/DrinkDetail";
 import AboutPage from "./pages/AboutPage";
 import AuthPage from "./pages/AuthPage";
+import SavedDrinksPage from "./pages/SavedDrinksPage";
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
                 <Route path="/drinkpage" element={<DrinkPage />} />
                 <Route path="/drink/:id" element={<DrinkDetail />} />
                 <Route path="/about" element={<AboutPage />} />
+                <Route path="saveddrinks" element={<SavedDrinksPage />} />
             </Routes>
         </BrowserRouter>
     );

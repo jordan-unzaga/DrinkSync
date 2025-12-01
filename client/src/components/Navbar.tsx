@@ -44,9 +44,9 @@ export default function Navbar({ onSearch }: NavbarProps) {
                             Home
                         </Link>
 
-                        <a href="#" className="nav_link">
+                        <Link to="/saveddrinks" className="nav_link">
                             Saved Drinks
-                        </a>
+                        </Link>
 
                         <Link to="/about" className="nav_link">
                             About
