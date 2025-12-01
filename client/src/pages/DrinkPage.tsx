@@ -74,6 +74,7 @@ export function DrinkPage() {
     }, []);
 
     // load data
+    // load data
     useEffect(() => {
         if (!hasHydratedFromCache) return;
 
@@ -117,7 +118,8 @@ export function DrinkPage() {
         return () => {
             cancelled = true;
         };
-    }, [page, searchQuery, filter, searchVersion, hasHydratedFromCache, drinks.length]);
+    }, [page, searchQuery, filter, searchVersion, hasHydratedFromCache]);
+
 
     // cache in sessionStorage
     useEffect(() => {
@@ -184,6 +186,7 @@ export function DrinkPage() {
                 filter={filter}
                 onFilterChange={handleFilterChange}
             />
+
 
             <div className="drink_page">
                 {error && <p className="error_text">API error: {error}</p>}

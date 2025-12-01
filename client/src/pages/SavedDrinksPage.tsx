@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import DrinkCard from "../components/DrinkCard";
-import type { Drink } from "../api/fetchDrink";
+import type { Drink, DrinkFilter} from "../api/fetchDrink";
 import "../styles/DrinkCard.css"
 import "../styles/Navbar.css"
 import Navbar from "../components/Navbar";
@@ -9,9 +9,9 @@ export default function SavedDrinksPage() {
     const [drinks, setDrinks] = useState<Drink[]>([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect (() => {
+    useEffect(() => {
         async function loadSaved() {
-            const res = await fetch ("/~w62q346/finalproject/drink-sync/server/getSavedDrinks.php", {
+            const res = await fetch("/~w62q346/finalproject/drink-sync/server/getSavedDrinks.php", {
                 credentials: "include"
             });
             const data = await res.json();
@@ -37,7 +37,7 @@ export default function SavedDrinksPage() {
                     description: "",
                     alcoholic: !apiDrink.strAlcoholic.includes("Non alcoholic"),
                     rating: 0,
-                    icon: apiDrink.strDrinkThumb, 
+                    icon: apiDrink.strDrinkThumb,
                     ingredients,
                     instructions: apiDrink.strInstructions ?? null
                 });
@@ -45,12 +45,16 @@ export default function SavedDrinksPage() {
             setDrinks(fetched);
             setLoading(false);
         }
+
         loadSaved();
     }, []);
 
     return (
         <>
-            <Navbar onSearch={() => {}} />
+            <Navbar onSearch={() => {
+            }} filter={"all"} onFilterChange={function (filter: DrinkFilter): void {
+                throw new Error("Function not implemented.");
+            }} />
 
             <div className = "drink_page">
             {loading && <p> Loading saved drinks...</p>}
