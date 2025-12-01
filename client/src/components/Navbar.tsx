@@ -40,7 +40,7 @@ export default function Navbar({ onSearch }: NavbarProps) {
                     </div>
 
                     <nav className="nav_links">
-                        <Link to="/" className="nav_link">
+                        <Link to="/drinkpage" className="nav_link">
                             Home
                         </Link>
 
