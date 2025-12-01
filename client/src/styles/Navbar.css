@@ -127,3 +127,10 @@
     color: var(--text-inverse);
     font-weight: 600;
 }
+
+.nav_filter_dropdown {
+    padding: 6px 10px;
+    border-radius: 6px;
+    margin-right: 10px;
+    font-size: 0.95rem;
+}

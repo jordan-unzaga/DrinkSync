@@ -1,10 +1,11 @@
 import { useLocation, useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
-import type { Drink } from "../api/fetchDrink";
+import type { Drink, DrinkFilter} from "../api/fetchDrink";
 
 import "../styles/DrinkCard.css";
 import "../styles/DrinkDetail.css";
 import "../styles/Navbar.css";
+import Navbar from "../components/Navbar";
 
 type ApiDrink = {
     idDrink: string;
@@ -16,7 +17,7 @@ type ApiDrink = {
 };
 
 export default function DrinkDetail() {
-    const { id } = useParams();
+    const {id} = useParams();
     const location = useLocation();
     const initialDrink = location.state as Drink | undefined;
 
@@ -44,8 +45,8 @@ export default function DrinkDetail() {
         fetch("https://csci331vm.cs.montana.edu/~w62q346/finalproject/drink-sync/server/saveDrink.php", {
             method: "POST",
             credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ drink_id: drink?.id })
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({drink_id: drink?.id})
         })
             .then(res => res.json())
             .then(data => {
@@ -61,8 +62,8 @@ export default function DrinkDetail() {
         fetch("https://csci331vm.cs.montana.edu/~w62q346/finalproject/drink-sync/server/removeDrink.php", {
             method: "POST",
             credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ drink_id: drink?.id })
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({drink_id: drink?.id})
         })
             .then(res => res.json())
             .then(data => {
@@ -143,6 +144,11 @@ export default function DrinkDetail() {
 
     return (
         <>
+
+            <Navbar onSearch={() => {
+            }} filter={"all"} onFilterChange={function (filter: DrinkFilter): void {
+                throw new Error("Function not implemented.");
+            }} />
 
             <div className="drink_detail_page">
                 {loading && <p className="loading_text">Loading drink…</p>}

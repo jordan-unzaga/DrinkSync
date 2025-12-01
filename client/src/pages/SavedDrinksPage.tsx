@@ -3,6 +3,7 @@ import DrinkCard from "../components/DrinkCard";
 import type { Drink } from "../api/fetchDrink";
 import "../styles/DrinkCard.css"
 import "../styles/Navbar.css"
+import Navbar from "../components/Navbar";
 
 export default function SavedDrinksPage() {
     const [drinks, setDrinks] = useState<Drink[]>([]);
@@ -48,7 +49,10 @@ export default function SavedDrinksPage() {
     }, []);
 
     return (
-        <div className = "drink_page">
+        <>
+            <Navbar onSearch={() => {}} />
+
+            <div className = "drink_page">
             {loading && <p> Loading saved drinks...</p>}
             {!loading && drinks.length ==0 && <p>You have no saved drinks...</p>}
 
@@ -58,5 +62,6 @@ export default function SavedDrinksPage() {
                 ))}
             </ul>
         </div>
+            </>
     )
 }

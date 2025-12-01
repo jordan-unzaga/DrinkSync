@@ -1,19 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import { fetchDrink, type Drink } from "../api/fetchDrink";
+import { fetchDrink, type Drink, type DrinkFilter } from "../api/fetchDrink";
 
 import "../styles/DrinkCard.css";
 import "../styles/Navbar.css";
 import DrinkCard from "../components/DrinkCard";
 import Navbar from "../components/Navbar";
-import { useNavigate } from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
-const CACHE_KEY = "drink_page_state_v1";
+const CACHE_KEY = "drink_page_state_v2";
 
 type CachedState = {
     page: number;
     totalPages: number | null;
     searchQuery: string;
     drinks: Drink[];
+    filter: DrinkFilter;
 };
 
 export function DrinkPage() {
@@ -24,29 +25,38 @@ export function DrinkPage() {
     const [error, setError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchVersion, setSearchVersion] = useState(0);
+    const [filter, setFilter] = useState<DrinkFilter>("all");
 
     const [hasHydratedFromCache, setHasHydratedFromCache] = useState(false);
     const sentinelRef = useRef<HTMLDivElement | null>(null);
     const hasFetchedOnceRef = useRef(false);
 
-    const navigate = useNavigate()
+
+    const navigate = useNavigate();
+    const location = useLocation();
+    const isGuest =
+        new URLSearchParams(location.search).get("guest") === "1";
 
     useEffect(() => {
-        fetch("/~w62q346/finalproject/drink-sync/server/checkAuth.php", {
-            credentials: "include"
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (!data.logged_in) navigate("/login")
-        })
-    }, []);
+        if (isGuest) return;
 
-    // try to get from cache
+        fetch("/~w62q346/finalproject/drink-sync/server/checkAuth.php", {
+            credentials: "include",
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (!data.logged_in) navigate("/login");
+            })
+            .catch(() => {
+            });
+    }, [isGuest, navigate]);
+
+    // hydrate from sessionStorage
     useEffect(() => {
         const raw = sessionStorage.getItem(CACHE_KEY);
         if (raw) {
             try {
-                const parsed: CachedState = JSON.parse(raw);
+                const parsed: Partial<CachedState> = JSON.parse(raw);
 
                 setPage(parsed.page ?? 1);
                 setTotalPages(
@@ -54,6 +64,7 @@ export function DrinkPage() {
                 );
                 setSearchQuery(parsed.searchQuery ?? "");
                 setDrinks(parsed.drinks ?? []);
+                setFilter((parsed.filter as DrinkFilter) ?? "all");
             } catch {
                 sessionStorage.removeItem(CACHE_KEY);
             }
@@ -62,10 +73,11 @@ export function DrinkPage() {
         setHasHydratedFromCache(true);
     }, []);
 
-// load more data, skips if items already cached
+    // load data
     useEffect(() => {
         if (!hasHydratedFromCache) return;
 
+        // if we already have cached drinks for this state, skip first fetch
         if (!hasFetchedOnceRef.current && drinks.length > 0) {
             hasFetchedOnceRef.current = true;
             return;
@@ -80,7 +92,8 @@ export function DrinkPage() {
                 setLoading(true);
                 const { drinks: newDrinks, totalPages } = await fetchDrink(
                     page,
-                    searchQuery
+                    searchQuery,
+                    filter
                 );
                 if (cancelled) return;
 
@@ -90,7 +103,6 @@ export function DrinkPage() {
                     return [...prev, ...uniqueNew];
                 });
                 setTotalPages(totalPages);
-
             } catch (err: any) {
                 if (!cancelled) {
                     setError(err.message ?? "Unknown error");
@@ -105,9 +117,9 @@ export function DrinkPage() {
         return () => {
             cancelled = true;
         };
-    }, [page, searchQuery, searchVersion, hasHydratedFromCache]);
+    }, [page, searchQuery, filter, searchVersion, hasHydratedFromCache, drinks.length]);
 
-    // cache in session storage
+    // cache in sessionStorage
     useEffect(() => {
         if (!hasHydratedFromCache) return;
 
@@ -116,15 +128,17 @@ export function DrinkPage() {
             totalPages,
             searchQuery,
             drinks,
+            filter,
         };
 
         try {
             sessionStorage.setItem(CACHE_KEY, JSON.stringify(cache));
         } catch {
+            // ignore quota errors
         }
-    }, [drinks, page, totalPages, searchQuery, hasHydratedFromCache]);
+    }, [drinks, page, totalPages, searchQuery, filter, hasHydratedFromCache]);
 
-    // infinite scroll functionality
+    // infinite scroll
     useEffect(() => {
         const target = sentinelRef.current;
         if (!target) return;
@@ -143,7 +157,7 @@ export function DrinkPage() {
         return () => observer.disconnect();
     }, [loading, page, totalPages, drinks.length]);
 
-// search handler
+    // search handler (query)
     function handleSearch(query: string) {
         setDrinks([]);
         setPage(1);
@@ -153,16 +167,26 @@ export function DrinkPage() {
         setSearchVersion((v) => v + 1);
     }
 
+    // filter handler (all / alcoholic / nonalcoholic)
+    function handleFilterChange(newFilter: DrinkFilter) {
+        setDrinks([]);
+        setPage(1);
+        setTotalPages(null);
+        setError(null);
+        setFilter(newFilter);
+        setSearchVersion((v) => v + 1);
+    }
+
     return (
         <>
-            <Navbar onSearch={handleSearch} />
+            <Navbar
+                onSearch={handleSearch}
+                filter={filter}
+                onFilterChange={handleFilterChange}
+            />
 
             <div className="drink_page">
                 {error && <p className="error_text">API error: {error}</p>}
-
-                {/*<p className="debug_text">
-                    Debug: drinks={drinks.length} page={page} query="{searchQuery}"
-                </p> */}
 
                 <ul className="drink_list">
                     {drinks.map((drink, i) => (

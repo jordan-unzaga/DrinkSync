@@ -4,15 +4,16 @@ import { useNavigate } from "react-router-dom";
 export default function AuthForm() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [action, setAction] = useState<"login" | "register">("login");
     const navigate = useNavigate();
-    const [action, setAction] = useState("login");
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const endpoint = action === "login"
-            ? "https://csci331vm.cs.montana.edu/~w62q346/finalproject/drink-sync/server/login.php"
-            : "https://csci331vm.cs.montana.edu/~w62q346/finalproject/drink-sync/server/register.php";
+        const endpoint =
+            action === "login"
+                ? "https://csci331vm.cs.montana.edu/~w62q346/finalproject/drink-sync/server/login.php"
+                : "https://csci331vm.cs.montana.edu/~w62q346/finalproject/drink-sync/server/register.php";
 
         const response = await fetch(endpoint, {
             method: "POST",
@@ -35,29 +36,46 @@ export default function AuthForm() {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <input 
+                <input
                     type="text"
                     placeholder="username"
                     value={username}
-                    onChange={e => setUsername(e.target.value)}
+                    onChange={(e) => setUsername(e.target.value)}
                 />
                 <input
                     type="password"
                     placeholder="password"
                     value={password}
-                    onChange={e => setPassword(e.target.value)}
+                    onChange={(e) => setPassword(e.target.value)}
                 />
 
                 <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-                    <button type="submit" onClick={() => setAction("login")} value="login">
+                    <button
+                        type="submit"
+                        onClick={() => setAction("login")}
+                        value="login"
+                    >
                         Login
                     </button>
 
-                    <button type="submit" onClick={() => setAction("register")} value="register">
+                    <button
+                        type="submit"
+                        onClick={() => setAction("register")}
+                        value="register"
+                    >
                         Register
+                    </button>
+                </div>
+
+                <div style={{ marginTop: "16px" }}>
+                    <button
+                        type="button"
+                        onClick={() => navigate("/drinkpage?guest=1")}
+                    >
+                        Continue as Guest
                     </button>
                 </div>
             </form>
         </div>
-    )
+    );
 }
