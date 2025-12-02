@@ -100,13 +100,7 @@ export default function Navbar({ onSearch, filter, onFilterChange, showSearch = 
                         ) : (
                             <button
                                 onClick={handleLogout}
-                                className="nav_link nav_link--logout"
-                                style={{
-                                    background: "none",
-                                    border: "none",
-                                    font: "inherit",
-                                    cursor: "pointer",
-                                }}
+                                className="nav_link nav_link--login"
                             >
                                 Logout
                             </button>
