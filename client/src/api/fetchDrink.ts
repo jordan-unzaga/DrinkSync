@@ -13,17 +13,11 @@ export type DrinkFilter = "all" | "alcoholic" | "nonalcoholic";
 
 const PAGE_SIZE = 6;
 
-// Cache 1: Stores the FULL Drink details, indexed by ID.
 const drinkDetailsCache = new Map<string, Drink>();
 
-// Cache 2: Stores the list of IDs/Items fetched for a specific page.
-// Key = `${query}|${filter}|${page}`, Value = Array of RAW API objects (max 6 items)
 const pageCache = new Map<string, any[]>();
 
 
-/**
- * Converts raw API drink data to the application's Drink type and caches it.
- */
 function mapAndCacheApiDrink(d: any): Drink {
     if (drinkDetailsCache.has(d.idDrink)) {
         return drinkDetailsCache.get(d.idDrink)!;
@@ -55,9 +49,6 @@ function mapAndCacheApiDrink(d: any): Drink {
     return drink;
 }
 
-/**
- * Utility to fetch drink details by ID, using/updating the global drinkDetailsCache.
- */
 async function getDrinkDetails(id: string): Promise<Drink | null> {
     if (drinkDetailsCache.has(id)) {
         return drinkDetailsCache.get(id)!;
@@ -90,10 +81,9 @@ export async function fetchDrink(
 ): Promise<{ drinks: Drink[]; totalPages: number }> {
     const trimmedQuery = query.trim();
 
-    // Different cache key including page for filtered/search views
     const cacheKey = `${trimmedQuery.toLowerCase()}|${filter}|${page}`;
 
-    // 1) NO QUERY + filter === "all" → random, 6 at a time, infinite (FASTEST)
+    // 1) NO QUERY + filter === "all" -> random
     if (trimmedQuery === "" && filter === "all") {
         const promises = Array.from({ length: PAGE_SIZE }, () =>
             fetch("https://www.thecocktaildb.com/api/json/v1/1/random.php").then(
@@ -111,7 +101,6 @@ export async function fetchDrink(
             .filter(Boolean)
             .map((d: any) => mapAndCacheApiDrink(d));
 
-        // Random should never "run out", so infinite pages
         return { drinks, totalPages: Number.POSITIVE_INFINITY };
     }
 
@@ -120,14 +109,10 @@ export async function fetchDrink(
     let totalPages: number = 1;
 
     if (!pagedApiItems) {
-        // 2a) NO QUERY but alcoholic/nonalcoholic filter (The Instant Load Fix)
+        // 2a) NO QUERY but alcoholic/nonalcoholic filter
         if (trimmedQuery === "" && filter !== "all") {
             const alcoholParam =
                 filter === "alcoholic" ? "Alcoholic" : "Non_Alcoholic";
-
-            // To emulate paging without fetching the whole list, we fetch the whole list
-            // but we ONLY fetch the details for the current page and discard the rest of the IDs.
-            // This sacrifices accurate totalPages calculation for speed.
 
             const listRes = await fetch(
                 `https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=${encodeURIComponent(
@@ -143,16 +128,14 @@ export async function fetchDrink(
                 return { drinks: [], totalPages: 1 };
             }
 
-            // Slice out only the current page's IDs/Items
             const start = (page - 1) * PAGE_SIZE;
             const end = start + PAGE_SIZE;
             pagedApiItems = allItems.slice(start, end);
 
-            // Calculate total pages based on the full list (the only time we use the full list size)
             totalPages = Math.max(1, Math.ceil(allItems.length / PAGE_SIZE));
 
         } else {
-            // 2b) QUERY present → search.php (Always fetches full list for filtering/paging)
+            // 2b) QUERY present -> search.php
             const res = await fetch(
                 `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${encodeURIComponent(
                     trimmedQuery
@@ -163,7 +146,6 @@ export async function fetchDrink(
             const data = await res.json();
             let cocktails: any[] = Array.isArray(data.drinks) ? data.drinks : [];
 
-            // Apply alcohol filter on search results
             if (filter === "alcoholic") {
                 cocktails = cocktails.filter(
                     (d) => d.strAlcoholic === "Alcoholic"
@@ -179,28 +161,20 @@ export async function fetchDrink(
                 return { drinks: [], totalPages: 1 };
             }
 
-            // Slice out only the current page's full drink objects
             const start = (page - 1) * PAGE_SIZE;
             const end = start + PAGE_SIZE;
             pagedApiItems = allItems.slice(start, end);
 
-            // Calculate total pages based on the full list
             totalPages = Math.max(1, Math.ceil(allItems.length / PAGE_SIZE));
         }
 
-        // Cache the paged items
         pageCache.set(cacheKey, pagedApiItems);
     }
 
-    // If the list was cached, we need to recalculate total pages based on the full list
-    // This assumes you store the total count somewhere, but since we don't, we'll
-    // skip the totalPages calculation here and rely on the UI to handle a blank next page.
-
-    // 3) Process and return the paged drinks
     let pagedDrinks: Drink[] = [];
 
     if (trimmedQuery === "" && filter !== "all") {
-        // 3a) Filter scenario: We only have IDs, so we fetch details for the current page (max 6).
+        // 3a) Filter scenario: Fetch details for the current page (max 6).
         const detailPromises = pagedApiItems.map((item: any) =>
             getDrinkDetails(item.idDrink)
         );
@@ -208,37 +182,20 @@ export async function fetchDrink(
         const detailedResults = await Promise.all(detailPromises);
         pagedDrinks = detailedResults.filter(Boolean) as Drink[];
 
-        // If totalPages was calculated in the if block (first fetch), use it.
-        // Otherwise, assume it's infinite for the smoothest experience.
         if (pageCache.get(cacheKey) && totalPages === 1) {
             totalPages = Number.POSITIVE_INFINITY;
         }
 
     } else {
-        // 3b) Search scenario: We have full API objects, so just map and cache.
+        // 3b) Search scenario: Map and cache full API objects.
         pagedDrinks = pagedApiItems.map((d: any) => mapAndCacheApiDrink(d));
-        // Recalculate totalPages using the searchCache (which is not available here)
-        // Since we can't reliably know the totalPages from the pageCache alone,
-        // you will need to accept that the totalPages will only be accurate on the first fetch.
-        // If the search results were cached, we default totalPages to a large number
-        // or 1 if no drinks were returned.
+
         if (pagedDrinks.length === 0) {
             totalPages = 1;
-        } else {
-            // For search, we still need the total count from the full cached search list
-            // Since we don't have the full list cached in this structure, we must
-            // make the search logic run outside the 'if (!pagedApiItems)' block
-            // to get the total count. This makes the search slow again.
-            //
-            // THE ONLY RELIABLE FAST PATH IS TO CACHE THE FULL LISTS FOR SEARCH AND FILTER.
-            // Let's revert the search to cache the full list, and keep filter fast.
-            // This is the fastest, safest hybrid:
         }
     }
 
-    // Final check for an empty result set (this happens if page > totalPages)
     if (pagedDrinks.length === 0 && page > 1) {
-        // This is the end of the line, even if we assumed infinite pages
         totalPages = page;
     }
 
