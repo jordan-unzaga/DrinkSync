@@ -21,8 +21,6 @@ export default function DrinkDetail() {
     const location = useLocation();
     const initialDrink = location.state as Drink | undefined;
 
-    const isGuest = new URLSearchParams(location.search).get("guest") === "1";
-
     const [drink, setDrink] = useState<Drink | null>(initialDrink ?? null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -132,7 +130,7 @@ export default function DrinkDetail() {
             }
         }
 
-        // Only fetch if we dont have a drink with instructions yet
+        // Only fetch if we *don't* have a drink with instructions yet
         if (!drink) {
             fetchDetail();
         }
@@ -147,9 +145,7 @@ export default function DrinkDetail() {
     return (
         <>
 
-            <Navbar onSearch={() => {
-            }} filter={"all"} onFilterChange={function (filter: DrinkFilter): void {
-            }} />
+            <Navbar showSearch = {false} />
 
             <div className="drink_detail_page">
                 {loading && <p className="loading_text">Loading drink…</p>}
@@ -163,7 +159,7 @@ export default function DrinkDetail() {
 
                         <div
                             className={`tag ${drink.alcoholic ? "alcoholic" : "non-alcoholic"
-                            }`}
+                                }`}
                         >
                             {drink.alcoholic ? "Alcoholic" : "Non-Alcoholic"}
                         </div>
@@ -180,16 +176,14 @@ export default function DrinkDetail() {
                         <h3>Instructions</h3>
                         <p>{drink.instructions ?? "No instructions available."}</p>
 
-                        {!isGuest && (
-                            <div className="button_row">
-                                <button className="save_button" onClick={handleSaveClick}>
-                                    Save Drink
-                                </button>
-                                <button className="remove_button" onClick={handleRemoveClick}>
-                                    Remove Drink
-                                </button>
-                            </div>
-                        )}
+                        <div className="button_row">
+                            <button className="save_button" onClick={handleSaveClick}>
+                                Save Drink
+                            </button>
+                            <button className="remove_button" onClick={handleRemoveClick}>
+                                Remove Drink
+                            </button>
+                        </div>
                     </div>
                 )}
 

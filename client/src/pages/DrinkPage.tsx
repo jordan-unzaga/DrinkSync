@@ -195,6 +195,7 @@ export function DrinkPage() {
                 onSearch={handleSearch}
                 filter={filter}
                 onFilterChange={handleFilterChange}
+                showSearch={true}
             />
 
 

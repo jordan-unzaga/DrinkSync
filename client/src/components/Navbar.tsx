@@ -4,14 +4,13 @@ import "../styles/Navbar.css";
 import type { DrinkFilter } from "../api/fetchDrink";
 
 type NavbarProps = {
-    onSearch: (query: string) => void;
-    filter: DrinkFilter;
-    onFilterChange: (filter: DrinkFilter) => void;
-    // NEW: Optional prop to control search bar visibility
-    showSearchBar?: boolean;
+    onSearch?: (query: string) => void;
+    filter?: DrinkFilter;
+    onFilterChange?: (filter: DrinkFilter) => void;
+    showSearch?: boolean;
 };
 
-export default function Navbar({ onSearch, filter, onFilterChange, showSearchBar = true }: NavbarProps) {
+export default function Navbar({ onSearch, filter, onFilterChange, showSearch = false }: NavbarProps) {
     const [term, setTerm] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
@@ -37,9 +36,8 @@ export default function Navbar({ onSearch, filter, onFilterChange, showSearchBar
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
-        onSearch(term.trim());
-        // Use the function to navigate and preserve the guest status
-        navigate(guestLink("/drinkpage"));
+        onSearch?.(term.trim());
+        if (isGuest) navigate("/drinkpage?guest=1");
     }
 
     // NEW: clicking brand -> home, clear search, reset filter, refetch random drinks
@@ -49,14 +47,18 @@ export default function Navbar({ onSearch, filter, onFilterChange, showSearchBar
 
         // reset filter to "all"
         if (filter !== "all") {
-            onFilterChange("all");
+            onFilterChange?.("all");
         }
 
         // clear search query so fetchDrink goes into random mode again
-        onSearch("");
+        onSearch?.("");
 
         // navigate to home (respect guest mode)
-        navigate(guestLink("/drinkpage"));
+        if (isGuest) {
+            navigate("/drinkpage?guest=1");
+        } else {
+            navigate("/drinkpage");
+        }
     }
 
     return (
@@ -116,15 +118,15 @@ export default function Navbar({ onSearch, filter, onFilterChange, showSearchBar
                     </nav>
                 </div>
 
-                {/* RIGHT SIDE: search + filter (Conditionally rendered) */}
-                {showSearchBar && (
-                    <div className="nav_right">
-                        <form className="nav_search" onSubmit={handleSubmit}>
+                {/* RIGHT SIDE: search + filter */}
+                <div className="nav_right">
+                    {showSearch && (
+                         <form className="nav_search" onSubmit={handleSubmit}>
                             <select
                                 className="nav_filter_dropdown"
                                 value={filter}
                                 onChange={(e) =>
-                                    onFilterChange(e.target.value as DrinkFilter)
+                                    onFilterChange?.(e.target.value as DrinkFilter)
                                 }
                             >
                                 <option value="all">All Drinks</option>
@@ -144,8 +146,9 @@ export default function Navbar({ onSearch, filter, onFilterChange, showSearchBar
                                 Search
                             </button>
                         </form>
-                    </div>
-                )}
+                    )}
+                   
+                </div>
             </div>
         </header>
     );

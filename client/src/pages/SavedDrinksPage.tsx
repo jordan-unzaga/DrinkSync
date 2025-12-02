@@ -51,24 +51,18 @@ export default function SavedDrinksPage() {
 
     return (
         <>
-            <Navbar
-                onSearch={() => {}}
-                filter={"all"}
-                onFilterChange={function (filter: DrinkFilter): void {
-                }}
-                showSearchBar={false}
-            />
+            <Navbar showSearch={false}/>
 
             <div className = "drink_page">
-                {loading && <p> Loading saved drinks...</p>}
-                {!loading && drinks.length ==0 && <p>You have no saved drinks...</p>}
+            {loading && <p> Loading saved drinks...</p>}
+            {!loading && drinks.length ==0 && <p>You have no saved drinks...</p>}
 
-                <ul className = "drink_list">
-                    {drinks.map((drink, i) => (
-                        <DrinkCard key={i} {...drink} />
-                    ))}
-                </ul>
-            </div>
-        </>
+            <ul className = "drink_list">
+                {drinks.map((drink, i) => (
+                    <DrinkCard key={i} {...drink} />
+                ))}
+            </ul>
+        </div>
+            </>
     )
 }
