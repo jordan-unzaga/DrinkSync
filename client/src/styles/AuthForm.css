@@ -1,0 +1,157 @@
+/* AuthForm.css */
+
+.auth_page {
+    min-height: calc(100vh - 64px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    background: var(--bg-main);
+}
+
+/* Card */
+.auth_card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--bg-light);
+    border-radius: 14px;
+    border: 1px solid var(--border-soft);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+    padding: 22px 20px 20px;
+}
+
+/* Title + subtitle */
+.auth_title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 4px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-main);
+    opacity: 0.95;
+}
+
+.auth_subtitle {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* Form layout */
+.auth_form {
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* Field + labels */
+.auth_field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.auth_label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-main);
+    opacity: 0.9;
+}
+
+/* Inputs to match nav search */
+.auth_input {
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border-soft);
+    background: var(--bg-main);
+    color: var(--text-main);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.auth_input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.9;
+}
+
+.auth_input:focus {
+    border-color: var(--acc1);
+    background: var(--bg-light);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+/* Primary actions (Login / Register) */
+.auth_primary_actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.auth_button_primary {
+    flex: 1;
+    height: 36px;
+    border: none;
+    border-radius: 999px;
+    padding: 0 14px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--acc1);
+    color: var(--text-inverse);
+    transition: background 0.18s ease, transform 0.1s ease, box-shadow 0.18s ease;
+}
+
+.auth_button_primary:hover {
+    background: var(--acc1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.35);
+    transform: translateY(-1px);
+}
+
+.auth_button_primary:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Guest button – ghost style like a nav pill */
+.auth_guest_action {
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
+}
+
+.auth_button_ghost {
+    height: 34px;
+    padding: 0 16px;
+    border-radius: 999px;
+    border: 1px solid var(--border-soft);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.86rem;
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease,
+    transform 0.1s ease, box-shadow 0.18s ease;
+}
+
+.auth_button_ghost:hover {
+    background: var(--bg-lighter);
+    border-color: var(--acc1);
+    color: var(--text-main);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.32);
+    transform: translateY(-1px);
+}
+
+.auth_button_ghost:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* Optional error text */
+.auth_error {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #ff4d4d;
+    text-align: center;
+}
