@@ -24,7 +24,12 @@ export default function AuthForm() {
         });
 
         const data = await response.json();
-        if (data.success) navigate("/drinkpage");
+        if (data.success) {
+            navigate("/drinkpage");
+            if (action == "register") {
+                alert("Successfully registered! Please login now.")
+            }
+        }
         else alert(data.message || "Something went wrong");
     };
 

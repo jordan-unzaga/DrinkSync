@@ -16,7 +16,7 @@ $username = $data["username"];
 $password = $data["password"];
 
 if (!$username || !$password) {
-    echo json_encode(["success" => false, "message" => "Missing info jit"]);
+    echo json_encode(["success" => false, "message" => "Please fill in all fields"]);
     exit();
 }
 
@@ -26,9 +26,9 @@ $stmt = $pdo->prepare("INSERT INTO test_users (username, password_hash) VALUES (
 
 try {
     $stmt-> execute([$username, $passwordHash]);
-    echo json_encode(["success" => true]);
+    echo json_encode(["success" => true, "message" => "Registration successful! Please login now."]);
 } catch (PDOException $e) {
-    echo json_encode(["success" => false, "message" => "pick a different username jit"]);
+    echo json_encode(["success" => false, "message" => "Username already in use."]);
 }
 
 ?>

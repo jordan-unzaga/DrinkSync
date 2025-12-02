@@ -14,7 +14,7 @@ $stmt->execute([$username]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if(!$user || !password_verify($password, $user["password_hash"])) {
-    echo json_encode(["success" => false, "message" => "Wrong login jit"]);
+    echo json_encode(["success" => false, "message" => "Invalid credentials"]);
     exit();
 }
 

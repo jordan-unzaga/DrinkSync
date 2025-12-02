@@ -3,7 +3,7 @@ session_start();
 header("Content-Type: application/json");
 
 if (!isset($_SESSION['user_id'])) {
-    echo json_encode(["success" => false, "error" => "Not logged in jit"]);
+    echo json_encode(["success" => false, "error" => "User not logged in"]);
     exit();
 }
 
@@ -14,7 +14,7 @@ $drink_id = $data["drink_id"];
 $user_id = $_SESSION["user_id"];
 
 if (!$drink_id) {
-    echo json_encode(["success" => false, "error" => "No drink ID jit"]);
+    echo json_encode(["success" => false, "error" => "No drink ID found"]);
     exit();
 }
 
@@ -24,13 +24,13 @@ $stmt->execute([$user_id, $drink_id]);
 $exists = $stmt->fetch();
 
 if($exists) {
-    echo json_encode (["success" => true, "message" => "Saved this already jit"]);
+    echo json_encode (["success" => true, "message" => "Drink saved already"]);
     exit();
 }
 
 $stmt = $pdo->prepare("INSERT INTO test_user_saved_drinks (user_id, drink_id) VALUES (?, ?)");
 $stmt->execute([$user_id, $drink_id]);
 
-echo json_encode(["success" => true, "message" => "Drink saved jit"]);
+echo json_encode(["success" => true, "message" => "Drink saved"]);
 exit();
 ?>

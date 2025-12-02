@@ -3,7 +3,7 @@ session_start();
 header("Content-Type: application/json");
 
 if (!isset($_SESSION['user_id'])) {
-    echo json_encode(["success" => false, "error" => "Not logged in jit"]);
+    echo json_encode(["success" => false, "error" => "User not logged in"]);
     exit();
 }
 
@@ -14,7 +14,7 @@ $drink_id = $data["drink_id"];
 $user_id = $_SESSION["user_id"];
 
 if (!$drink_id) {
-    echo json_encode(["success" => false, "error" => "Ain't no drink ID jit"]);
+    echo json_encode(["success" => false, "error" => "No drink ID found"]);
     exit();
 }
 
