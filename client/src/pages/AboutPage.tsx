@@ -1,18 +1,12 @@
 import "../styles/Navbar.css";
 import "../styles/AboutPage.css";
 import Navbar from "../components/Navbar";
-import { DrinkFilter } from "../api/fetchDrink";
 
 export default function AboutPage() {
     return (
         <>
-            <Navbar
-                onSearch={() => {}}
-                filter={"all"}
-                onFilterChange={function (filter: DrinkFilter): void {
-                }}
-                showSearchBar={false}
-            />
+            <Navbar showSearch = {false} />
+
 
             <div className="about_page">
                 <h1>About DrinkSync</h1>
