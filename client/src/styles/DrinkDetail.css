@@ -22,53 +22,58 @@
     margin-top: 18px;
 }
 
+.button_row {
+    margin-top: 1.5rem;
+}
+
 .save_button,
 .remove_button {
-    margin-top: 1.5rem;
     padding: 0.7rem 1.4rem;
     font-size: 1.05rem;
     border-radius: 10px;
-    border: none;
     cursor: pointer;
     font-weight: 500;
-    transition:
-            background-color 0.2s ease,
-            box-shadow 0.2s ease,
-            transform 0.1s ease;
+
+    margin: 0 10px;
+
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease, border-color 0.2s ease;
+
+    background: transparent;
+    border: 1px solid;
 }
 
 .save_button {
-    background-color: #4CAF50;
-    color: white;
-    margin-right: 10px;
+    border-color: #4CAF50; /* Green */
+    color: #4CAF50;
 }
 
 .save_button:hover {
-    background-color: #45a049;
-    box-shadow: 0 0 10px rgba(76, 175, 80, 0.55);
+    background-color: rgba(76, 175, 80, 0.1);
+
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.7);
     transform: translateY(-2px);
 }
 
 .save_button:active {
     transform: scale(0.96);
-    box-shadow: 0 0 6px rgba(76, 175, 80, 0.35);
+    box-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
 }
 
 .remove_button {
-    background-color: #e02424;
-    color: white;
-    margin-left: 10px;
+    border-color: #e02424; /* Red */
+    color: #e02424;
 }
 
 .remove_button:hover {
-    background-color: #ca1111;
-    box-shadow: 0 0 10px rgba(255, 80, 80, 0.55);
+    background-color: rgba(224, 36, 36, 0.1);
+
+    box-shadow: 0 0 10px rgba(224, 36, 36, 0.7);
     transform: translateY(-2px);
 }
 
 .remove_button:active {
     transform: scale(0.96);
-    box-shadow: 0 0 6px rgba(255, 80, 80, 0.35);
+    box-shadow: 0 0 6px rgba(224, 36, 36, 0.4);
 }
 
 
