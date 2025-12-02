@@ -40,20 +40,15 @@ export default function Navbar({ onSearch, filter, onFilterChange, showSearch = 
         if (isGuest) navigate("/drinkpage?guest=1");
     }
 
-    // NEW: clicking brand -> home, clear search, reset filter, refetch random drinks
     function handleBrandClick() {
-        // clear local input
         setTerm("");
 
-        // reset filter to "all"
         if (filter !== "all") {
             onFilterChange?.("all");
         }
 
-        // clear search query so fetchDrink goes into random mode again
         onSearch?.("");
 
-        // navigate to home (respect guest mode)
         if (isGuest) {
             navigate("/drinkpage?guest=1");
         } else {
@@ -66,7 +61,6 @@ export default function Navbar({ onSearch, filter, onFilterChange, showSearch = 
             <div className="nav_inner">
                 {/* LEFT SIDE: brand + links */}
                 <div className="nav_left">
-                    {/* make brand clickable */}
                     <button
                         type="button"
                         className="nav_brand"
@@ -97,13 +91,16 @@ export default function Navbar({ onSearch, filter, onFilterChange, showSearch = 
                         </Link>
 
                         {isGuest ? (
-                            <Link to="/login" className="nav_link">
+                            <Link
+                                to="/login"
+                                className="nav_link nav_link--login"
+                            >
                                 Login
                             </Link>
                         ) : (
                             <button
                                 onClick={handleLogout}
-                                className="nav_link"
+                                className="nav_link nav_link--logout"
                                 style={{
                                     background: "none",
                                     border: "none",
@@ -121,7 +118,7 @@ export default function Navbar({ onSearch, filter, onFilterChange, showSearch = 
                 {/* RIGHT SIDE: search + filter */}
                 <div className="nav_right">
                     {showSearch && (
-                         <form className="nav_search" onSubmit={handleSubmit}>
+                        <form className="nav_search" onSubmit={handleSubmit}>
                             <select
                                 className="nav_filter_dropdown"
                                 value={filter}
@@ -147,7 +144,6 @@ export default function Navbar({ onSearch, filter, onFilterChange, showSearch = 
                             </button>
                         </form>
                     )}
-                   
                 </div>
             </div>
         </header>
