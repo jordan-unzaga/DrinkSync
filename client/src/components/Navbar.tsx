@@ -104,13 +104,13 @@ export default function Navbar({ onSearch, filter, onFilterChange, showSearch = 
                                 style={{
                                     background: "none",
                                     border: "none",
-                                    padding: 0,
                                     font: "inherit",
                                     cursor: "pointer",
                                 }}
                             >
                                 Logout
                             </button>
+
                         )}
                     </nav>
                 </div>

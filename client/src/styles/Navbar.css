@@ -163,6 +163,14 @@
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
 }
 
+.nav_link--logout {
+    padding: 7px 14px !important;
+    display: flex;
+    align-items: center;
+    border-radius: 999px;
+}
+
+
 .nav_link--login:hover {
     background: var(--bg-lighter);
 
