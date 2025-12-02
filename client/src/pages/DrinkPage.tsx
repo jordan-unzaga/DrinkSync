@@ -34,9 +34,13 @@ export function DrinkPage() {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const isGuest =
-        new URLSearchParams(location.search).get("guest") === "1";
 
+    // Retrieves the current search query string, which contains "?guest=1" if present.
+    const currentSearch = location.search;
+
+    const isGuest = new URLSearchParams(currentSearch).get("guest") === "1";
+
+    // Authentication Check
     useEffect(() => {
         if (isGuest) return;
 
@@ -51,7 +55,7 @@ export function DrinkPage() {
             });
     }, [isGuest, navigate]);
 
-    // hydrate from sessionStorage
+    // Hydrate from sessionStorage
     useEffect(() => {
         const raw = sessionStorage.getItem(CACHE_KEY);
         if (raw) {
@@ -73,8 +77,7 @@ export function DrinkPage() {
         setHasHydratedFromCache(true);
     }, []);
 
-    // load data
-    // load data
+    // Load data
     useEffect(() => {
         if (!hasHydratedFromCache) return;
 
@@ -136,7 +139,6 @@ export function DrinkPage() {
         try {
             sessionStorage.setItem(CACHE_KEY, JSON.stringify(cache));
         } catch {
-            // ignore quota errors
         }
     }, [drinks, page, totalPages, searchQuery, filter, hasHydratedFromCache]);
 
@@ -159,7 +161,7 @@ export function DrinkPage() {
         return () => observer.disconnect();
     }, [loading, page, totalPages, drinks.length]);
 
-    // search handler (query)
+    // search handler
     function handleSearch(query: string) {
         setDrinks([]);
         setPage(1);
@@ -179,6 +181,14 @@ export function DrinkPage() {
         setSearchVersion((v) => v + 1);
     }
 
+    function handleDrinkClick(drinkId: string, drinkData: Drink) {
+        const newPath = `/drink/${drinkId}${currentSearch}`;
+
+        navigate(newPath, {
+            state: drinkData // Pass data to avoid re-fetching details
+        });
+    }
+
     return (
         <>
             <Navbar
@@ -193,7 +203,9 @@ export function DrinkPage() {
 
                 <ul className="drink_list">
                     {drinks.map((drink, i) => (
-                        <DrinkCard key={i} {...drink} />
+                        <div key={i} onClick={() => handleDrinkClick(drink.id, drink)}>
+                            <DrinkCard {...drink} />
+                        </div>
                     ))}
                 </ul>
 

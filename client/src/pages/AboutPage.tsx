@@ -6,10 +6,13 @@ import { DrinkFilter } from "../api/fetchDrink";
 export default function AboutPage() {
     return (
         <>
-            <Navbar onSearch={() => {
-            }} filter={"all"} onFilterChange={function (filter: DrinkFilter): void {
-                throw new Error("Function not implemented.");
-            }}/>
+            <Navbar
+                onSearch={() => {}}
+                filter={"all"}
+                onFilterChange={function (filter: DrinkFilter): void {
+                }}
+                showSearchBar={false}
+            />
 
             <div className="about_page">
                 <h1>About DrinkSync</h1>

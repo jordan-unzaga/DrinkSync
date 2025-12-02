@@ -7,9 +7,11 @@ type NavbarProps = {
     onSearch: (query: string) => void;
     filter: DrinkFilter;
     onFilterChange: (filter: DrinkFilter) => void;
+    // NEW: Optional prop to control search bar visibility
+    showSearchBar?: boolean;
 };
 
-export default function Navbar({ onSearch, filter, onFilterChange }: NavbarProps) {
+export default function Navbar({ onSearch, filter, onFilterChange, showSearchBar = true }: NavbarProps) {
     const [term, setTerm] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
@@ -36,7 +38,8 @@ export default function Navbar({ onSearch, filter, onFilterChange }: NavbarProps
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
         onSearch(term.trim());
-        if (isGuest) navigate("/drinkpage?guest=1");
+        // Use the function to navigate and preserve the guest status
+        navigate(guestLink("/drinkpage"));
     }
 
     // NEW: clicking brand -> home, clear search, reset filter, refetch random drinks
@@ -53,11 +56,7 @@ export default function Navbar({ onSearch, filter, onFilterChange }: NavbarProps
         onSearch("");
 
         // navigate to home (respect guest mode)
-        if (isGuest) {
-            navigate("/drinkpage?guest=1");
-        } else {
-            navigate("/drinkpage");
-        }
+        navigate(guestLink("/drinkpage"));
     }
 
     return (
@@ -117,34 +116,36 @@ export default function Navbar({ onSearch, filter, onFilterChange }: NavbarProps
                     </nav>
                 </div>
 
-                {/* RIGHT SIDE: search + filter */}
-                <div className="nav_right">
-                    <form className="nav_search" onSubmit={handleSubmit}>
-                        <select
-                            className="nav_filter_dropdown"
-                            value={filter}
-                            onChange={(e) =>
-                                onFilterChange(e.target.value as DrinkFilter)
-                            }
-                        >
-                            <option value="all">All Drinks</option>
-                            <option value="alcoholic">Alcoholic</option>
-                            <option value="nonalcoholic">Non-Alcoholic</option>
-                        </select>
+                {/* RIGHT SIDE: search + filter (Conditionally rendered) */}
+                {showSearchBar && (
+                    <div className="nav_right">
+                        <form className="nav_search" onSubmit={handleSubmit}>
+                            <select
+                                className="nav_filter_dropdown"
+                                value={filter}
+                                onChange={(e) =>
+                                    onFilterChange(e.target.value as DrinkFilter)
+                                }
+                            >
+                                <option value="all">All Drinks</option>
+                                <option value="alcoholic">Alcoholic</option>
+                                <option value="nonalcoholic">Non-Alcoholic</option>
+                            </select>
 
-                        <input
-                            type="text"
-                            className="nav_search_input"
-                            placeholder="Search drinks..."
-                            value={term}
-                            onChange={(e) => setTerm(e.target.value)}
-                        />
+                            <input
+                                type="text"
+                                className="nav_search_input"
+                                placeholder="Search drinks..."
+                                value={term}
+                                onChange={(e) => setTerm(e.target.value)}
+                            />
 
-                        <button type="submit" className="nav_search_button">
-                            Search
-                        </button>
-                    </form>
-                </div>
+                            <button type="submit" className="nav_search_button">
+                                Search
+                            </button>
+                        </form>
+                    </div>
+                )}
             </div>
         </header>
     );
