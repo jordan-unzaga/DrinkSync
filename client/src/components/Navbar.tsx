@@ -4,12 +4,13 @@ import "../styles/Navbar.css";
 import type { DrinkFilter } from "../api/fetchDrink";
 
 type NavbarProps = {
-    onSearch: (query: string) => void;
-    filter: DrinkFilter;
-    onFilterChange: (filter: DrinkFilter) => void;
+    onSearch?: (query: string) => void;
+    filter?: DrinkFilter;
+    onFilterChange?: (filter: DrinkFilter) => void;
+    showSearch?: boolean;
 };
 
-export default function Navbar({ onSearch, filter, onFilterChange }: NavbarProps) {
+export default function Navbar({ onSearch, filter, onFilterChange, showSearch = false }: NavbarProps) {
     const [term, setTerm] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
@@ -35,7 +36,7 @@ export default function Navbar({ onSearch, filter, onFilterChange }: NavbarProps
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
-        onSearch(term.trim());
+        onSearch?.(term.trim());
         if (isGuest) navigate("/drinkpage?guest=1");
     }
 
@@ -46,11 +47,11 @@ export default function Navbar({ onSearch, filter, onFilterChange }: NavbarProps
 
         // reset filter to "all"
         if (filter !== "all") {
-            onFilterChange("all");
+            onFilterChange?.("all");
         }
 
         // clear search query so fetchDrink goes into random mode again
-        onSearch("");
+        onSearch?.("");
 
         // navigate to home (respect guest mode)
         if (isGuest) {
@@ -119,31 +120,34 @@ export default function Navbar({ onSearch, filter, onFilterChange }: NavbarProps
 
                 {/* RIGHT SIDE: search + filter */}
                 <div className="nav_right">
-                    <form className="nav_search" onSubmit={handleSubmit}>
-                        <select
-                            className="nav_filter_dropdown"
-                            value={filter}
-                            onChange={(e) =>
-                                onFilterChange(e.target.value as DrinkFilter)
-                            }
-                        >
-                            <option value="all">All Drinks</option>
-                            <option value="alcoholic">Alcoholic</option>
-                            <option value="nonalcoholic">Non-Alcoholic</option>
-                        </select>
+                    {showSearch && (
+                         <form className="nav_search" onSubmit={handleSubmit}>
+                            <select
+                                className="nav_filter_dropdown"
+                                value={filter}
+                                onChange={(e) =>
+                                    onFilterChange?.(e.target.value as DrinkFilter)
+                                }
+                            >
+                                <option value="all">All Drinks</option>
+                                <option value="alcoholic">Alcoholic</option>
+                                <option value="nonalcoholic">Non-Alcoholic</option>
+                            </select>
 
-                        <input
-                            type="text"
-                            className="nav_search_input"
-                            placeholder="Search drinks..."
-                            value={term}
-                            onChange={(e) => setTerm(e.target.value)}
-                        />
+                            <input
+                                type="text"
+                                className="nav_search_input"
+                                placeholder="Search drinks..."
+                                value={term}
+                                onChange={(e) => setTerm(e.target.value)}
+                            />
 
-                        <button type="submit" className="nav_search_button">
-                            Search
-                        </button>
-                    </form>
+                            <button type="submit" className="nav_search_button">
+                                Search
+                            </button>
+                        </form>
+                    )}
+                   
                 </div>
             </div>
         </header>

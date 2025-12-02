@@ -51,10 +51,7 @@ export default function SavedDrinksPage() {
 
     return (
         <>
-            <Navbar onSearch={() => {
-            }} filter={"all"} onFilterChange={function (filter: DrinkFilter): void {
-                throw new Error("Function not implemented.");
-            }} />
+            <Navbar showSearch={false}/>
 
             <div className = "drink_page">
             {loading && <p> Loading saved drinks...</p>}

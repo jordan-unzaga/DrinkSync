@@ -145,10 +145,7 @@ export default function DrinkDetail() {
     return (
         <>
 
-            <Navbar onSearch={() => {
-            }} filter={"all"} onFilterChange={function (filter: DrinkFilter): void {
-                throw new Error("Function not implemented.");
-            }} />
+            <Navbar showSearch = {false} />
 
             <div className="drink_detail_page">
                 {loading && <p className="loading_text">Loading drink…</p>}
