@@ -2,6 +2,9 @@
 
 Check it out here: [DrinkSync](https://csci331vm.cs.montana.edu/~w62q346/finalproject/drink-sync/client/build)
 
+Presentation:
+https://docs.google.com/presentation/d/13tBiq7IYaSPkvgLTMxNoocOINSWaDUzl2gakcj9XnzU/edit?usp=sharing
+
 ## Overview
 
 DrinkSync is a web app that lets users explore mixed drink recipes, receive random drink suggestions, search drinks by name, and save favorites for future reference.
